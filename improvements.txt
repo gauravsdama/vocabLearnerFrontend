@@ -1,0 +1,29 @@
+preferences page make one control for weekly and daily
+make cards in scrolling able to scroll right and left too
+make cards content fill the card. have 3 sentences displayed for learning words examples
+rather than n. for noun spell out noun and make it take up space. make the word itself all caps and larger. 
+
+cards should have borders and the color determines what kind of card it itself
+
+intro page, start scrolling should be a large tile - twice to thrice the size of the other 2 options. the entire tile should be a button as well not a button inside the tile
+
+
+colors
+
+add voice
+
+blue and purple helps your brain remember better
+
+make quizzes have the entire quiz on one page. 
+
+skip button only takes me to second card. 
+when user reaches the end more cards should populate. maintain maximum 30 cards loaded (let go of prior cards as the user scrolls)
+repopulate example sentences
+
+in stats page let user open a word to view their words of the week and progress
+
+also let them view all their total progress
+add messages from the backend
+
+add email function and optionally hide twilio
+

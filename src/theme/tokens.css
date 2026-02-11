@@ -1,0 +1,37 @@
+:root {
+  color-scheme: light;
+  --bg: #f6f1e8;
+  --bgElev: #fbf7f0;
+  --surface: #ffffff;
+  --surface2: #fffcf7;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: rgba(15, 23, 42, 0.1);
+  --primary: #0f766e;
+  --primaryHover: #0d6b63;
+  --primaryPressed: #0b5f58;
+  --primaryTint: rgba(15, 118, 110, 0.1);
+  --indigo: #4f46e5;
+  --indigoTint: rgba(79, 70, 229, 0.1);
+  --amber: #f59e0b;
+  --amberTint: rgba(245, 158, 11, 0.12);
+  --success: #16a34a;
+  --successTint: rgba(22, 163, 74, 0.1);
+  --danger: #dc2626;
+  --dangerTint: rgba(220, 38, 38, 0.1);
+  --font: "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  --rCard: 24px;
+  --rBtn: 18px;
+  --rPill: 999px;
+  --shadowCard: 0 18px 50px rgba(2, 6, 23, 0.1);
+  --shadowCardHover: 0 22px 70px rgba(2, 6, 23, 0.12);
+  --focusRing: 0 0 0 4px rgba(79, 70, 229, 0.18);
+  --s1: 8px;
+  --s2: 16px;
+  --s3: 24px;
+  --s4: 32px;
+  --s5: 40px;
+  --s6: 48px;
+}
