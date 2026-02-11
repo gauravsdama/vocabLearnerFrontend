@@ -375,6 +375,51 @@
   gap: var(--s3);
   text-align: center;
   overflow: hidden;
+  container-type: inline-size;
+}
+
+.feed-card-inner .ds-h1 {
+  font-size: clamp(3rem, 8cqw, 6.25rem);
+}
+
+.feed-card-inner .ds-h2 {
+  font-size: clamp(1.8rem, 4.8cqw, 3.4rem);
+}
+
+.feed-card-inner .ds-body {
+  font-size: clamp(1.05rem, 2.35cqw, 1.65rem);
+}
+
+.feed-card-inner .ds-caption {
+  font-size: clamp(0.95rem, 1.6cqw, 1.15rem);
+}
+
+.feed-card-inner .pill {
+  font-size: clamp(0.72rem, 1.35cqw, 0.95rem);
+  padding: clamp(0.35rem, 0.9cqw, 0.55rem) clamp(0.8rem, 1.4cqw, 1.05rem);
+}
+
+.feed-card-inner .progress-pill {
+  font-size: clamp(0.72rem, 1.35cqw, 0.95rem);
+  padding: clamp(0.35rem, 0.9cqw, 0.55rem) clamp(0.75rem, 1.3cqw, 1rem);
+}
+
+.feed-card-inner .button {
+  font-size: clamp(0.95rem, 1.75cqw, 1.15rem);
+  padding: clamp(0.7rem, 1.2cqw, 0.95rem) clamp(1.2rem, 1.9cqw, 1.6rem);
+}
+
+.feed-card-inner .option-card {
+  font-size: clamp(1rem, 2.1cqw, 1.35rem);
+  padding: clamp(0.85rem, 1.4cqw, 1.15rem) clamp(1rem, 1.7cqw, 1.3rem);
+}
+
+.feed-card-inner .part-of-speech {
+  font-size: clamp(0.95rem, 1.6cqw, 1.2rem);
+}
+
+.feed-card-inner .examples-title {
+  font-size: clamp(1rem, 1.9cqw, 1.35rem);
 }
 
 .feed-card-top {
@@ -432,6 +477,7 @@
 
 .subpage .stack {
   flex: 1;
+  justify-content: center;
 }
 
 .subpage-controls {
