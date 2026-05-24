@@ -3,8 +3,8 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import RouteLoading from "../components/RouteLoading";
 
-export default function RequireAuth({ children }: { children: React.ReactNode }) {
-  const { token, loading } = useAuth();
+export default function RequireVerifiedAuth({ children }: { children: React.ReactNode }) {
+  const { token, user, loading } = useAuth();
 
   if (loading) {
     return <RouteLoading />;
@@ -12,6 +12,10 @@ export default function RequireAuth({ children }: { children: React.ReactNode })
 
   if (!token) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (user?.email_verified === false) {
+    return <Navigate to="/check-email" replace />;
   }
 
   return <>{children}</>;

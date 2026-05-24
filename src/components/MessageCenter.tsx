@@ -9,6 +9,7 @@ import React, {
 import { apiGet, apiPost } from "../api/client";
 import type { MessageDTO, MessagesResponse } from "../api/types";
 import { setMessageHandler } from "../utils/messageBus";
+import { extractMessages } from "../utils/messageUtils";
 import Button from "./Button";
 import Card from "./Card";
 
@@ -60,13 +61,6 @@ function pruneDismissed(map: Record<string, number>) {
   return map;
 }
 
-function normalizeMessages(response: MessagesResponse | MessageDTO[]) {
-  if (Array.isArray(response)) {
-    return response;
-  }
-  return response.messages ?? [];
-}
-
 export function MessageProvider({ children }: { children: React.ReactNode }) {
   const [messages, setMessages] = useState<MessageDTO[]>([]);
 
@@ -94,7 +88,7 @@ export function MessageProvider({ children }: { children: React.ReactNode }) {
 
   const fetchMessages = useCallback(async () => {
     const response = await apiGet<MessagesResponse | MessageDTO[]>("/messages");
-    addMessages(normalizeMessages(response));
+    addMessages(extractMessages(response));
   }, [addMessages]);
 
   const dismissMessage = useCallback(async (id: string) => {
