@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppShell from "../components/AppShell";
 import Button from "../components/Button";
@@ -12,15 +12,16 @@ import type {
   FeedSessionResponse,
   MarkSkippedRequest,
   MarkViewedRequest,
-  Progress,
 } from "../api/types";
 import { debounce } from "../utils/debounce";
 import { getErrorMessage } from "../utils/apiError";
 import { logError, logInfo, logWarn } from "../utils/logger";
 import CardRenderer from "./CardRenderer";
+import { applyCardProgressUpdate } from "./progressState";
 import { useMessages } from "../components/MessageCenter";
 
 const FEED_LIMIT = 10;
+const FEED_WINDOW_BUFFER = 3;
 
 export default function FeedScreen() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function FeedScreen() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [progress, setProgress] = useState<Progress | null>(null);
+  const [viewportHeight, setViewportHeight] = useState(1);
   const sessionIdRef = useRef<string | null>(null);
   const activeCardIdRef = useRef<string | null>(null);
 
@@ -42,7 +43,6 @@ export default function FeedScreen() {
     setLoading(true);
     setError(null);
     setActiveIndex(0);
-    setProgress(null);
     viewed.current.clear();
     let resumeLoaded = false;
     try {
@@ -268,6 +268,17 @@ export default function FeedScreen() {
   }, []);
 
   useEffect(() => {
+    const updateViewportHeight = () => {
+      const nextHeight = containerRef.current?.clientHeight ?? window.innerHeight;
+      setViewportHeight(nextHeight > 0 ? nextHeight : 1);
+    };
+
+    updateViewportHeight();
+    window.addEventListener("resize", updateViewportHeight);
+    return () => window.removeEventListener("resize", updateViewportHeight);
+  }, []);
+
+  useEffect(() => {
     return () => {
       if (!sessionIdRef.current) {
         return;
@@ -351,7 +362,6 @@ export default function FeedScreen() {
   const startNewSession = async () => {
     setLoading(true);
     setError(null);
-    setProgress(null);
     try {
       try {
         await endSession(sessionId);
@@ -401,11 +411,22 @@ export default function FeedScreen() {
     }
   };
 
-  const onProgressUpdate = useCallback((next?: Progress) => {
-    if (next) {
-      setProgress(next);
+  const onProgressUpdate = useCallback((cardId: string, nextProgress?: FeedCard["progress"]) => {
+    if (!nextProgress) {
+      return;
     }
+    setCards((prev) => applyCardProgressUpdate(prev, cardId, nextProgress));
   }, []);
+
+  const visibleRange = useMemo(() => {
+    const start = Math.max(0, activeIndex - FEED_WINDOW_BUFFER);
+    const end = Math.min(cards.length, activeIndex + FEED_WINDOW_BUFFER + 1);
+    return { start, end };
+  }, [activeIndex, cards.length]);
+
+  const topSpacerHeight = visibleRange.start * viewportHeight;
+  const bottomSpacerHeight = Math.max(0, cards.length - visibleRange.end) * viewportHeight;
+  const visibleCards = cards.slice(visibleRange.start, visibleRange.end);
 
   if (loading) {
     return (
@@ -453,16 +474,24 @@ export default function FeedScreen() {
       contentClassName="feed-shell"
     >
       <div className="feed-container" ref={containerRef}>
-        {cards.map((card, index) => (
+        {topSpacerHeight > 0 ? (
+          <div aria-hidden style={{ height: topSpacerHeight }} />
+        ) : null}
+        {visibleCards.map((card, offset) => {
+          const index = visibleRange.start + offset;
+          return (
           <CardRenderer
             key={card.card_id}
             card={card}
             onSkip={() => handleSkip(card)}
             onProgressUpdate={onProgressUpdate}
             isActive={index === activeIndex}
-            progress={progress}
           />
-        ))}
+          );
+        })}
+        {bottomSpacerHeight > 0 ? (
+          <div aria-hidden style={{ height: bottomSpacerHeight }} />
+        ) : null}
         {!hasMore && cards.length > 0 ? (
           <div className="feed-card">
             <Card className="feed-card-inner end-card">

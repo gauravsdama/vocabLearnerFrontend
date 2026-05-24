@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AppShell from "../components/AppShell";
 import Button from "../components/Button";
 import Card from "../components/Card";
+import Mascot from "../components/Mascot";
 import Modal from "../components/Modal";
 import Toast from "../components/Toast";
 import { apiGet, apiPatch, apiPost } from "../api/client";
@@ -17,7 +18,6 @@ import type {
 } from "../api/types";
 import { getErrorMessage } from "../utils/apiError";
 import { logError, logInfo } from "../utils/logger";
-import { useMessages } from "../components/MessageCenter";
 
 const ALL_WORDS_PAGE_SIZE = 50;
 
@@ -189,7 +189,6 @@ function resolveStreak(word: StatsWord) {
 
 export default function Stats() {
   const navigate = useNavigate();
-  const { addMessages } = useMessages();
   const [stats, setStats] = useState<StatsSummary | null>(null);
   const [words, setWords] = useState<StatsWord[]>([]);
   const [listPage, setListPage] = useState(1);
@@ -234,9 +233,6 @@ export default function Stats() {
       .then((data) => {
         if (mounted) {
           setStats(data);
-          if (data.messages?.length) {
-            addMessages(data.messages);
-          }
           logInfo("WEB_STATS_LOAD_OK", "Stats load succeeded", {
             method: "GET",
             url: "/stats/summary",
@@ -260,7 +256,7 @@ export default function Stats() {
     return () => {
       mounted = false;
     };
-  }, [addMessages]);
+  }, []);
 
   useEffect(() => {
     const nextQuery = searchInput.trim();
@@ -646,6 +642,22 @@ export default function Stats() {
         </Button>
       }
     >
+      <section className="page-mascot-banner page-mascot-banner-stats">
+        <div className="page-mascot-copy">
+          <span className="ds-label">Momentum</span>
+          <h2 className="ds-h2">This screen gets the brighter mascot treatment.</h2>
+          <p className="ds-body muted">
+            The feed reacts to each answer, while stats stays upbeat and progress-focused.
+          </p>
+        </div>
+        <Mascot
+          pose="happy_bright"
+          alt="A bright happy cat highlighting your study progress."
+          size="xl"
+          className="page-mascot-hero"
+        />
+      </section>
+
       <section className="stats-grid">
         <Card className="stat-card" accent="word">
           <h2 className="ds-h2">{formatNumber(stats?.mastered_count)}</h2>

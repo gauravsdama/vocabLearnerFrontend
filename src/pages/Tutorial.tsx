@@ -3,15 +3,22 @@ import { useNavigate } from "react-router-dom";
 import AppShell from "../components/AppShell";
 import Button from "../components/Button";
 import Card from "../components/Card";
+import Mascot from "../components/Mascot";
 import Toast from "../components/Toast";
 import { useAuth } from "../auth/AuthContext";
 import { apiPost } from "../api/client";
 import type { TutorialCompleteRequest } from "../api/types";
 import { getErrorMessage } from "../utils/apiError";
+import {
+  clampInteger,
+  DEFAULT_TEXTS_PER_WEEK,
+  DEFAULT_WORDS_PER_WEEK,
+  MAX_TEXTS_PER_WEEK,
+  MAX_WORDS_PER_WEEK,
+  MIN_TEXTS_PER_WEEK,
+  MIN_WORDS_PER_WEEK,
+} from "../utils/learningTargets";
 import { logError, logInfo } from "../utils/logger";
-
-const DEFAULT_WORDS_PER_WEEK = 20;
-const DEFAULT_TEXTS_PER_WEEK = 3;
 
 export default function Tutorial() {
   const navigate = useNavigate();
@@ -27,9 +34,19 @@ export default function Tutorial() {
     try {
       const timezone =
         Intl.DateTimeFormat().resolvedOptions().timeZone ?? undefined;
+      const safeWordsPerWeek = clampInteger(
+        wordsPerWeek,
+        MIN_WORDS_PER_WEEK,
+        MAX_WORDS_PER_WEEK,
+      );
+      const safeTextsPerWeek = clampInteger(
+        textsPerWeek,
+        MIN_TEXTS_PER_WEEK,
+        MAX_TEXTS_PER_WEEK,
+      );
       const payload: TutorialCompleteRequest = {
-        words_per_week: wordsPerWeek,
-        texts_per_week: textsPerWeek,
+        words_per_week: safeWordsPerWeek,
+        texts_per_week: safeTextsPerWeek,
         ...(timezone ? { timezone } : {}),
       };
       logInfo("WEB_TUTORIAL_COMPLETE_START", "Tutorial complete started", {
@@ -62,20 +79,28 @@ export default function Tutorial() {
   return (
     <AppShell centered maxWidth="narrow">
       <Card className="form-card">
-        <div className="stack">
-          <span className="ds-label">Tutorial</span>
-          <h1 className="ds-h2">Set your weekly targets.</h1>
-          <p className="ds-body muted">
-            Choose a sustainable pace. You can change this later in settings.
-          </p>
+        <div className="form-mascot-row">
+          <Mascot
+            pose="happy_soft"
+            alt="A calm cat encouraging you to set a sustainable weekly pace."
+            size="md"
+            className="form-mascot"
+          />
+          <div className="stack">
+            <span className="ds-label">Tutorial</span>
+            <h1 className="ds-h2">Set your weekly targets.</h1>
+            <p className="ds-body muted">
+              Choose a sustainable pace. You can change this later in settings.
+            </p>
+          </div>
         </div>
         <div className="form-stack">
           <label className="field">
             <span>Words per week</span>
             <input
               type="range"
-              min={5}
-              max={100}
+              min={MIN_WORDS_PER_WEEK}
+              max={MAX_WORDS_PER_WEEK}
               value={wordsPerWeek}
               onChange={(event) =>
                 setWordsPerWeek(Number(event.target.value))
@@ -87,8 +112,8 @@ export default function Tutorial() {
             <span>Texts per week</span>
             <input
               type="range"
-              min={1}
-              max={14}
+              min={MIN_TEXTS_PER_WEEK}
+              max={MAX_TEXTS_PER_WEEK}
               value={textsPerWeek}
               onChange={(event) =>
                 setTextsPerWeek(Number(event.target.value))
