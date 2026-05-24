@@ -4,6 +4,7 @@ import { useAuth } from "../auth/AuthContext";
 import AppShell from "../components/AppShell";
 import Button from "../components/Button";
 import Card from "../components/Card";
+import Mascot from "../components/Mascot";
 import { useMessages } from "../components/MessageCenter";
 
 export default function Home() {
@@ -17,7 +18,7 @@ export default function Home() {
 
   return (
     <AppShell
-      eyebrow="Vocab Learner"
+      eyebrow="Vocabcat"
       title="Choose your next move."
       action={
         <Button variant="ghost" onClick={logout}>
@@ -33,21 +34,31 @@ export default function Home() {
           className="tile-card tile-card-primary card-hover"
           onClick={() => navigate("/feed")}
         >
-          <span className="tile-icon" aria-hidden>
-            <svg viewBox="0 0 24 24" fill="none">
-              <path
-                d="M5 12h14M13 6l6 6-6 6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </span>
-          <h2 className="ds-h2">Start Scrolling</h2>
-          <p className="ds-body muted">
-            Dive into words, quizzes, and prompts in a full-screen feed.
-          </p>
+          <div className="tile-card-primary-content">
+            <div className="tile-card-copy">
+              <span className="tile-icon" aria-hidden>
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M5 12h14M13 6l6 6-6 6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+              <h2 className="ds-h2">Start Scrolling</h2>
+              <p className="ds-body muted">
+                Dive into words, quizzes, and prompts in a full-screen feed.
+              </p>
+            </div>
+            <Mascot
+              pose="happy_warm"
+              alt="A warm smiling cat welcoming you into the study feed."
+              size="xl"
+              className="tile-card-mascot"
+            />
+          </div>
         </Card>
         <Card
           as="button"

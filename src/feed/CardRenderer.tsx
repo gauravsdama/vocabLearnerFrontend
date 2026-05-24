@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
 import Card from "../components/Card";
+import Mascot from "../components/Mascot";
 import OptionCard from "../components/OptionCard";
 import ProgressPill from "../components/ProgressPill";
 import Toast from "../components/Toast";
@@ -15,7 +16,7 @@ import type {
   WriteSentenceCard,
 } from "../api/types";
 import { getErrorMessage } from "../utils/apiError";
-import { logError, logInfo, logWarn } from "../utils/logger";
+import { logError, logInfo } from "../utils/logger";
 
 const emptyArray: string[] = [];
 const EXAMPLE_TARGET = 3;
@@ -47,17 +48,14 @@ function getUniqueExamples(examples: string[]) {
 type CardRendererProps = {
   card: FeedCard;
   onSkip: () => void;
-  onProgressUpdate: (progress?: Progress) => void;
+  onProgressUpdate: (cardId: string, progress?: Progress) => void;
   isActive: boolean;
-  progress?: Progress | null;
 };
 
 export default function CardRenderer({
   card,
   onSkip,
   onProgressUpdate,
-  isActive,
-  progress,
 }: CardRendererProps) {
   const [toast, setToast] = useState<string | null>(null);
   const cardAccent =
@@ -67,7 +65,6 @@ export default function CardRenderer({
         ? "quiz"
         : "sentence";
   const pillTone = cardAccent;
-  const displayProgress = progress ?? card.progress;
   const cardLabel =
     card.card_type === "WORD"
       ? "Word"
@@ -85,7 +82,7 @@ export default function CardRenderer({
         <div className="feed-card-top">
           <div className="feed-card-meta">
             <span className={`pill pill-${pillTone}`}>{cardLabel}</span>
-            <ProgressPill progress={displayProgress} />
+            <ProgressPill progress={card.progress} />
           </div>
           <Button variant="ghost" onClick={onSkip}>
             Skip
@@ -93,7 +90,7 @@ export default function CardRenderer({
         </div>
         <div className="feed-card-body">
           {card.card_type === "WORD" ? (
-            <WordCardView card={card} onSkip={onSkip} isActive={isActive} />
+            <WordCardView card={card} />
           ) : card.card_type === "QUIZ_MCQ" ? (
             <QuizCardView
               card={card}
@@ -114,21 +111,11 @@ export default function CardRenderer({
   );
 }
 
-function WordCardView({
-  card,
-  onSkip,
-  isActive,
-}: {
-  card: WordCard;
-  onSkip: () => void;
-  isActive: boolean;
-}) {
+function WordCardView({ card }: { card: WordCard }) {
   const [index, setIndex] = useState(0);
-  const autoSkippedRef = useRef(false);
 
   useEffect(() => {
     setIndex(0);
-    autoSkippedRef.current = false;
   }, [card.card_id]);
 
   const examplesRaw = card.word.examples ?? emptyArray;
@@ -158,37 +145,6 @@ function WordCardView({
     </div>,
   ];
 
-  useEffect(() => {
-    if (!isActive) {
-      return;
-    }
-    if (uniqueExamples.length >= EXAMPLE_TARGET) {
-      autoSkippedRef.current = false;
-      return;
-    }
-    if (autoSkippedRef.current) {
-      return;
-    }
-    autoSkippedRef.current = true;
-    logWarn("WEB_FEED_EXAMPLES_INSUFFICIENT", "Insufficient unique examples", {
-      card_id: card.card_id,
-      word_id: card.word.word_id,
-      word: card.word.word,
-      examples_count: examplesRaw.length,
-      unique_examples_count: uniqueExamples.length,
-      examples: examplesRaw,
-    });
-    onSkip();
-  }, [
-    card.card_id,
-    card.word.word,
-    card.word.word_id,
-    examplesRaw.length,
-    uniqueExamples.length,
-    onSkip,
-    isActive,
-  ]);
-
   if (card.quiz) {
     pages.push(
       <div className="stack" key="quiz-preview">
@@ -214,7 +170,7 @@ function QuizCardView({
   onToast,
 }: {
   card: QuizCard;
-  onProgressUpdate: (progress?: Progress) => void;
+  onProgressUpdate: (cardId: string, progress?: Progress) => void;
   onToast: (message: string | null) => void;
 }) {
   const [index, setIndex] = useState(0);
@@ -261,7 +217,7 @@ function QuizCardView({
         chosen_index: selected,
       });
       setResult(response);
-      onProgressUpdate(response.updated_progress);
+      onProgressUpdate(card.card_id, response.updated_progress);
       setIndex(2);
       logInfo("WEB_QUIZ_SUBMIT_OK", "Quiz submit succeeded", {
         method: "POST",
@@ -318,19 +274,35 @@ function QuizCardView({
       </Button>
     </div>,
     <div className="stack" key="result">
-      <h3 className="ds-h2">Result</h3>
-      {result ? (
-        <>
-          <p className={result.correct ? "correct" : "incorrect"}>
-            {result.correct ? "Correct" : "Incorrect"}
-          </p>
-          {result.explanation ? (
-            <p className="ds-body muted">{result.explanation}</p>
-          ) : null}
-        </>
-      ) : (
-        <p className="ds-body muted">Submit your answer to see results.</p>
-      )}
+      <div className="feed-result-layout">
+        <div className="stack feed-result-copy">
+          <h3 className="ds-h2">Result</h3>
+          {result ? (
+            <>
+              <p className={result.correct ? "correct" : "incorrect"}>
+                {result.correct ? "Correct" : "Incorrect"}
+              </p>
+              {result.explanation ? (
+                <p className="ds-body muted">{result.explanation}</p>
+              ) : null}
+            </>
+          ) : (
+            <p className="ds-body muted">Submit your answer to see results.</p>
+          )}
+        </div>
+        <Mascot
+          pose={result ? (result.correct ? "happy_excited" : "sad_dejected") : "happy_soft"}
+          alt={
+            result
+              ? result.correct
+                ? "An excited cat celebrating a correct answer."
+                : "A sad cat acknowledging an incorrect answer."
+              : "A friendly cat waiting for your answer."
+          }
+          size="lg"
+          className="feed-result-mascot"
+        />
+      </div>
     </div>,
   ];
 
@@ -343,7 +315,7 @@ function SentenceCardView({
   onToast,
 }: {
   card: WriteSentenceCard;
-  onProgressUpdate: (progress?: Progress) => void;
+  onProgressUpdate: (cardId: string, progress?: Progress) => void;
   onToast: (message: string | null) => void;
 }) {
   const [index, setIndex] = useState(0);
@@ -378,7 +350,7 @@ function SentenceCardView({
         },
       );
       setResult(response);
-      onProgressUpdate(response.updated_progress);
+      onProgressUpdate(card.card_id, response.updated_progress);
       setIndex(2);
       logInfo("WEB_SENT_SUBMIT_OK", "Sentence submit succeeded", {
         method: "POST",
@@ -424,20 +396,36 @@ function SentenceCardView({
       </Button>
     </div>,
     <div className="stack" key="result">
-      <h3 className="ds-h2">Result</h3>
-      {result ? (
-        <>
-          <p className={result.is_valid ? "correct" : "incorrect"}>
-            {result.is_valid ? "Looks good" : "Needs work"}
-          </p>
-          {typeof result.score === "number" ? (
-            <p className="ds-body">Score: {result.score}</p>
-          ) : null}
-          <p className="ds-body muted">{result.feedback}</p>
-        </>
-      ) : (
-        <p className="ds-body muted">Submit your sentence to get feedback.</p>
-      )}
+      <div className="feed-result-layout">
+        <div className="stack feed-result-copy">
+          <h3 className="ds-h2">Result</h3>
+          {result ? (
+            <>
+              <p className={result.is_valid ? "correct" : "incorrect"}>
+                {result.is_valid ? "Looks good" : "Needs work"}
+              </p>
+              {typeof result.score === "number" ? (
+                <p className="ds-body">Score: {result.score}</p>
+              ) : null}
+              <p className="ds-body muted">{result.feedback}</p>
+            </>
+          ) : (
+            <p className="ds-body muted">Submit your sentence to get feedback.</p>
+          )}
+        </div>
+        <Mascot
+          pose={result ? (result.is_valid ? "happy_excited" : "sad_dejected") : "happy_soft"}
+          alt={
+            result
+              ? result.is_valid
+                ? "An excited cat celebrating a strong sentence."
+                : "A sad cat acknowledging that the sentence needs work."
+              : "A friendly cat waiting for your sentence."
+          }
+          size="lg"
+          className="feed-result-mascot"
+        />
+      </div>
     </div>,
   ];
 

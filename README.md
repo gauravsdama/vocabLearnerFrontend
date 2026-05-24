@@ -1,4 +1,4 @@
-# Vocab Learner Frontend
+# Vocabcat Frontend
 
 ## Setup
 
@@ -8,10 +8,13 @@ npm install
 
 ### Environment
 
+For the full auth setup and provider-console steps, see `AUTH_SETUP_GUIDE.md`.
+
 Create a `.env.local` file in the project root (recommended for dev overrides):
 
 ```bash
 VITE_API_BASE_URL=http://localhost:8000
+VITE_GOOGLE_CLIENT_ID=xxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
 ```
 
 For production builds, use `.env.production`:
@@ -48,6 +51,7 @@ npm run dev
 - Stats endpoint: `GET /stats/summary`.
 - Feed endpoints: `/feed/start`, `/feed/resume`, `/feed/{feed_session_id}/next`, `/feed/mark_viewed`, `/feed/mark_skipped`, `/feed/end`.
 - Auth endpoints: `/auth/register`, `/auth/login`, `/auth/me` with `Authorization: Bearer <access_token>`.
-- Access tokens are stored in `localStorage` for this MVP.
+- Auth pages: `/login`, `/register`, `/check-email`, `/verify-email`, `/email-verified`, `/forgot-password`, `/reset-password`
+- Access and refresh tokens are stored in `localStorage`.
 - Client logging always writes to the browser console in all environments.
 - To enable the dev-only diagnostics button on login/register errors, set `VITE_TRACE_UI=true`.

@@ -1,4 +1,5 @@
 import React from "react";
+import BrandWordmark from "./BrandWordmark";
 import clsx from "./clsx";
 import MessageCenter from "./MessageCenter";
 
@@ -26,6 +27,7 @@ export default function AppShell({
   contentClassName,
 }: AppShellProps) {
   const showHeader = Boolean(eyebrow || title || subtitle || action);
+  const isBrandEyebrow = eyebrow?.toLowerCase() === "vocabcat";
   const innerClass = clsx(
     "app-shell-inner",
     maxWidth === "narrow" ? "app-shell-narrow" : "",
@@ -38,7 +40,13 @@ export default function AppShell({
         {showHeader ? (
           <div className="app-shell-header">
             <div className="app-shell-title">
-              {eyebrow ? <span className="ds-label">{eyebrow}</span> : null}
+              {eyebrow ? (
+                isBrandEyebrow ? (
+                  <BrandWordmark />
+                ) : (
+                  <span className="ds-label">{eyebrow}</span>
+                )
+              ) : null}
               {title ? <h1 className="ds-h2">{title}</h1> : null}
               {subtitle ? <p className="ds-body muted">{subtitle}</p> : null}
             </div>

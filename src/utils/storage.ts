@@ -1,25 +1,51 @@
-const TOKEN_KEY = "vocab_access_token";
+/**
+ * Auth storage utilities.
+ *
+ * Security model:
+ * - access_token and refresh_token are stored as httpOnly cookies by the
+ *   backend. They are never readable by JavaScript, preventing XSS-based
+ *   token theft.
+ * - client_signing_key is a per-session HMAC key used to sign API requests.
+ *   It is stored in sessionStorage (cleared when the tab/window closes) rather
+ *   than localStorage so it is not persisted across sessions.
+ * - The access token value is also held in React state (in-memory only) so
+ *   that the signing logic can verify a session is active.
+ */
 
-export function getAccessToken(): string | null {
+const CLIENT_SIGNING_KEY = "vocab_client_signing_key";
+
+// ---------------------------------------------------------------------------
+// Client signing key  (sessionStorage — cleared on tab close)
+// ---------------------------------------------------------------------------
+
+export function getClientSigningKey(): string | null {
   try {
-    return localStorage.getItem(TOKEN_KEY);
+    return sessionStorage.getItem(CLIENT_SIGNING_KEY);
   } catch {
     return null;
   }
 }
 
-export function setAccessToken(token: string) {
+export function setClientSigningKey(key: string) {
   try {
-    localStorage.setItem(TOKEN_KEY, token);
+    sessionStorage.setItem(CLIENT_SIGNING_KEY, key);
   } catch {
-    // ignore storage errors for MVP
+    // ignore storage errors
   }
 }
 
-export function clearAccessToken() {
+export function clearClientSigningKey() {
   try {
-    localStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(CLIENT_SIGNING_KEY);
   } catch {
-    // ignore storage errors for MVP
+    // ignore storage errors
   }
+}
+
+// ---------------------------------------------------------------------------
+// Full auth storage clear (called on logout / session expiry)
+// ---------------------------------------------------------------------------
+
+export function clearAuthStorage() {
+  clearClientSigningKey();
 }

@@ -1,17 +1,31 @@
-import { getAccessToken, clearAccessToken } from "../utils/storage";
+import {
+  clearAuthStorage,
+  getClientSigningKey,
+} from "../utils/storage";
 import { logError, logInfo } from "../utils/logger";
 import { emitMessage } from "../utils/messageBus";
 import type { ApiError, ApiErrorShape } from "./types";
 import { getApiBaseUrl, normalizeBaseUrl } from "./config";
+import { buildSignatureHeaders } from "./signing";
 
 const API_PREFIX = "/api/v1";
 
 type UnauthorizedHandler = () => void;
+type TokenRefreshHandler = () => Promise<boolean>;
+type RequestBehavior = {
+  omitAuth?: boolean;
+  skipAuthRefresh?: boolean;
+};
 
 let unauthorizedHandler: UnauthorizedHandler | null = null;
+let tokenRefreshHandler: TokenRefreshHandler | null = null;
 
 export function setUnauthorizedHandler(handler: UnauthorizedHandler) {
   unauthorizedHandler = handler;
+}
+
+export function setTokenRefreshHandler(handler: TokenRefreshHandler | null) {
+  tokenRefreshHandler = handler;
 }
 
 function buildUrl(path: string) {
@@ -119,19 +133,37 @@ function parseRetryAfterSeconds(value: string | null) {
   return null;
 }
 
-async function apiRequest<T>(path: string, options: RequestInit): Promise<T> {
+async function apiRequest<T>(
+  path: string,
+  options: RequestInit,
+  behavior: RequestBehavior = {},
+): Promise<T> {
   const clientRequestId = createClientRequestId();
   const startedAt = performance.now();
-  const token = getAccessToken();
+  const signingKey = behavior.omitAuth ? null : getClientSigningKey();
+  const method = options.method ?? "GET";
+  const url = buildUrl(path);
+  const bodyText = typeof options.body === "string" ? options.body : "";
+  // Sign when we have a signing key. Auth token is carried by the httpOnly
+  // cookie automatically; we only check signingKey (not an in-memory token)
+  // because the token is no longer stored in JS memory.
+  const shouldSign =
+    Boolean(signingKey) && !behavior.omitAuth && method !== "GET" && method !== "HEAD";
+  const signatureHeaders =
+    shouldSign && signingKey
+      ? await buildSignatureHeaders({
+          method,
+          url,
+          bodyText,
+          signingKey,
+        })
+      : {};
   const headers: HeadersInit = {
     Accept: "application/json",
     ...(options.body ? { "Content-Type": "application/json" } : {}),
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...signatureHeaders,
     ...options.headers,
   };
-
-  const method = options.method ?? "GET";
-  const url = buildUrl(path);
 
   logInfo("WEB_API_REQ", "API request", {
     client_request_id: clientRequestId,
@@ -144,6 +176,7 @@ async function apiRequest<T>(path: string, options: RequestInit): Promise<T> {
   const response = await fetch(url, {
     ...options,
     headers,
+    credentials: "include", // Send httpOnly auth cookies automatically
   });
 
   const durationMs = Math.round(performance.now() - startedAt);
@@ -162,8 +195,32 @@ async function apiRequest<T>(path: string, options: RequestInit): Promise<T> {
   }
 
   if (!response.ok) {
-    if (response.status === 401) {
-      clearAccessToken();
+    const errorCode =
+      json && typeof json === "object" && "error" in json
+        ? String((json as ApiErrorShape).error.code ?? "")
+        : "";
+    const isSignatureError =
+      response.status === 401 && errorCode.toUpperCase().startsWith("SIGNATURE_");
+    const canAttemptRefresh =
+      response.status === 401 &&
+      !isSignatureError &&
+      !behavior.skipAuthRefresh &&
+      !behavior.omitAuth &&
+      path !== "/auth/refresh" &&
+      Boolean(tokenRefreshHandler);
+
+    if (canAttemptRefresh && tokenRefreshHandler) {
+      const refreshed = await tokenRefreshHandler();
+      if (refreshed) {
+        return apiRequest<T>(path, options, {
+          ...behavior,
+          skipAuthRefresh: true,
+        });
+      }
+      clearAuthStorage();
+      unauthorizedHandler?.();
+    } else if (response.status === 401 && !isSignatureError && !behavior.omitAuth) {
+      clearAuthStorage();
       unauthorizedHandler?.();
     }
     const serverRequestId =
@@ -219,27 +276,34 @@ async function apiRequest<T>(path: string, options: RequestInit): Promise<T> {
   return json as T;
 }
 
-export function apiGet<T>(path: string): Promise<T> {
-  return apiRequest<T>(path, { method: "GET" });
+export function apiGet<T>(path: string, behavior?: RequestBehavior): Promise<T> {
+  return apiRequest<T>(path, { method: "GET" }, behavior);
 }
 
-export function apiPost<T>(path: string, body?: unknown): Promise<T> {
+export function apiPost<T>(path: string, body?: unknown, behavior?: RequestBehavior): Promise<T> {
   return apiRequest<T>(path, {
     method: "POST",
     body: body ? JSON.stringify(body) : undefined,
-  });
+  }, behavior);
 }
 
-export function apiPut<T>(path: string, body?: unknown): Promise<T> {
+export function apiPut<T>(path: string, body?: unknown, behavior?: RequestBehavior): Promise<T> {
   return apiRequest<T>(path, {
     method: "PUT",
     body: body ? JSON.stringify(body) : undefined,
-  });
+  }, behavior);
 }
 
-export function apiPatch<T>(path: string, body?: unknown): Promise<T> {
+export function apiPatch<T>(path: string, body?: unknown, behavior?: RequestBehavior): Promise<T> {
   return apiRequest<T>(path, {
     method: "PATCH",
     body: body ? JSON.stringify(body) : undefined,
-  });
+  }, behavior);
+}
+
+export function apiDelete<T>(path: string, body?: unknown, behavior?: RequestBehavior): Promise<T> {
+  return apiRequest<T>(path, {
+    method: "DELETE",
+    body: body ? JSON.stringify(body) : undefined,
+  }, behavior);
 }

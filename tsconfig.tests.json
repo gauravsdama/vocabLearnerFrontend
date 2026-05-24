@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "outDir": ".tmp-test-dist",
+    "rootDir": ".",
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/api/signing.ts",
+    "src/utils/learningTargets.ts",
+    "src/utils/messageUtils.ts",
+    "src/feed/progressState.ts",
+    "tests/**/*.ts"
+  ]
+}
