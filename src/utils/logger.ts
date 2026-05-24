@@ -11,7 +11,7 @@ const DEFAULT_FIELDS: LogData = {
   duration_ms: null,
 };
 
-const SECRET_KEY_PATTERN = /password|authorization|token/i;
+const SECRET_KEY_PATTERN = /password|authorization|token|signature|secret/i;
 
 export function redact(value: unknown): unknown {
   if (Array.isArray(value)) {

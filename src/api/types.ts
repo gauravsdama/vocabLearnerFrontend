@@ -19,36 +19,84 @@ export type ApiError = {
   status: number;
 };
 
-export type AuthRequest = {
+export type LoginRequest = {
   email: string;
   password: string;
+};
+
+export type RegisterRequest = LoginRequest & {
+  display_name?: string;
+};
+
+export type GoogleAuthRequest = {
+  credential: string;
+  id_token?: string;
+};
+
+export type RefreshRequest = {
+  refresh_token?: string | null;
+};
+
+export type LogoutRequest = {
+  refresh_token?: string | null;
+};
+
+export type ForgotPasswordRequest = {
+  email: string;
+};
+
+export type ResetPasswordRequest = {
+  token: string;
+  new_password: string;
 };
 
 export type User = {
   id: string;
   email: string;
+  display_name?: string | null;
   email_verified?: boolean | null;
+  last_login_at?: string | null;
+  status?: string | null;
   timezone?: string | null;
   daily_new_words_goal?: number | null;
   feed_prefs?: FeedPrefs | null;
   words_per_week?: number | null;
   texts_per_week?: number | null;
   sms_opt_in?: boolean;
-  phone_e164?: string | null;
-  features?: UserFeatures | null;
-};
-
-export type UserFeatures = {
-  smsEnabled?: boolean;
   sms_enabled?: boolean;
-  [key: string]: unknown;
+  twilio_active?: boolean;
+  phone_e164?: string | null;
 };
 
 export type AuthResponse = {
   access_token: string;
+  refresh_token: string;
   token_type: string;
+  expires_in: number;
+  refresh_expires_in: number;
   user: User;
+  client_signing_key?: string | null;
+  needs_email_verification?: boolean;
 };
+
+export type VerifyEmailResponse = {
+  verified: boolean;
+  already_verified?: boolean;
+};
+
+export type VerifyEmailCodeRequest = {
+  code: string;
+};
+
+export type MessageResponse = {
+  ok?: boolean;
+  message: string;
+};
+
+export type AccountDeletionRequest = {
+  confirmation: string;
+};
+
 
 export type FeedPrefs = {
   mode?: string;
@@ -175,6 +223,8 @@ export type UserProfileUpdate = {
 
 export type SmsOptInRequest = {
   phone_e164: string;
+  consent_accepted: boolean;
+  consent_version: string;
 };
 
 export type TutorialStatusResponse = {
@@ -201,16 +251,17 @@ export type StatsSummary = {
     string,
     string | number | boolean | null | Record<string, unknown>
   >;
-  messages?: MessageDTO[];
 };
 
 export type MessageDTO = {
   id: string;
+  code?: string | null;
   title?: string | null;
   body?: string | null;
   level?: "info" | "success" | "warning" | "error";
   created_at?: string | null;
   dismissible?: boolean;
+  action?: Record<string, unknown> | null;
   action_label?: string | null;
   action_url?: string | null;
   [key: string]: unknown;
@@ -218,6 +269,9 @@ export type MessageDTO = {
 
 export type MessagesResponse = {
   messages?: MessageDTO[];
+  items?: MessageDTO[];
+  page?: number;
+  page_size?: number;
 };
 
 export type StatsWord = {
@@ -303,12 +357,7 @@ export type StudyProgressQuizAttemptsResponse = {
   attempts: StudyProgressQuizAttempt[];
 };
 
-export type MeResponse = {
-  user: User;
-  features?: UserFeatures | null;
-  messages?: MessageDTO[];
-};
-
 export type ResendEmailVerificationResponse = {
-  message?: string;
+  sent: boolean;
+  reason?: string | null;
 };
