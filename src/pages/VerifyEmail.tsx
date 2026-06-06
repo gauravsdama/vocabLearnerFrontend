@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import AppShell from "../components/AppShell";
 import Button from "../components/Button";
 import Card from "../components/Card";
@@ -7,6 +7,7 @@ import { apiGet } from "../api/client";
 import type { VerifyEmailResponse } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 import { getErrorMessage } from "../utils/apiError";
+import { extractTokenFromAuthLink } from "../utils/authLinkTokens";
 
 type VerifyState =
   | { status: "loading" }
@@ -14,13 +15,16 @@ type VerifyState =
   | { status: "success"; alreadyVerified: boolean };
 
 export default function VerifyEmail() {
+  const location = useLocation();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { markEmailVerified } = useAuth();
   const [state, setState] = useState<VerifyState>({ status: "loading" });
 
   useEffect(() => {
-    const tokenParam = searchParams.get("token")?.trim() ?? "";
+    const tokenParam = extractTokenFromAuthLink({
+      search: location.search,
+      hash: location.hash,
+    });
     if (!tokenParam) {
       setState({ status: "error", message: "This verification link is missing a token." });
       return;
@@ -59,7 +63,7 @@ export default function VerifyEmail() {
     return () => {
       cancelled = true;
     };
-  }, [markEmailVerified, navigate, searchParams]);
+  }, [location.hash, location.search, markEmailVerified, navigate]);
 
   return (
     <AppShell centered maxWidth="narrow">

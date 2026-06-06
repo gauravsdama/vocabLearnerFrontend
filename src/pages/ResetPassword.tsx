@@ -1,21 +1,25 @@
 import React, { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import AppShell from "../components/AppShell";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import Toast from "../components/Toast";
 import { useAuth } from "../auth/AuthContext";
 import { getErrorMessage } from "../utils/apiError";
+import { extractTokenFromAuthLink } from "../utils/authLinkTokens";
 
 export default function ResetPassword() {
   const { resetPassword } = useAuth();
-  const [searchParams] = useSearchParams();
+  const location = useLocation();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const token = searchParams.get("token")?.trim() || "";
+  const token = extractTokenFromAuthLink({
+    search: location.search,
+    hash: location.hash,
+  });
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
