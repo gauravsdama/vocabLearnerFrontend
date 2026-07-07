@@ -60,6 +60,7 @@ export default function ResetPassword() {
               onChange={(event) => setPassword(event.target.value)}
               required
               minLength={8}
+              autoComplete="new-password"
               className="ds-input"
             />
           </label>
@@ -71,6 +72,7 @@ export default function ResetPassword() {
               onChange={(event) => setConfirmPassword(event.target.value)}
               required
               minLength={8}
+              autoComplete="new-password"
               className="ds-input"
             />
           </label>

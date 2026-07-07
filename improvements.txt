@@ -27,3 +27,38 @@ add messages from the backend
 
 add email function and optionally hide twilio
 
+2026-05-31 session findings
+
+App organization
+
+Make the primary signed-in experience a persistent app shell with navigation, not a launcher dashboard. Right now /dashboard is mostly a card menu in Home.tsx, while /feed, /stats, and /settings each feel like separate islands. Make Feed, Progress, and Settings first-class sections with a stable nav, and demote the dashboard into a summary tab or top section. The current split is visible in App.tsx and AppShell.tsx.
+
+Put email verification into a dedicated onboarding lane. Right now unverified users get funneled into /check-email, while Settings still doubles as an account-management surface. That makes verification feel like a route-level blockade rather than part of onboarding. Separate the app into auth/onboarding and core app more explicitly in App.tsx.
+
+Split Settings by responsibility. Settings.tsx currently mixes verification, study targets, SMS setup, and account deletion. Break that into Account, Study, Notifications, and Danger Zone, either as subroutes or internal sections.
+
+Split Stats into overview vs library/history. Stats.tsx is doing summary cards, filters, a word list, and detail/history drill-in all on one screen. It works, but it’s too much for one mental model, especially on mobile. A cleaner structure would be Overview and Word Library.
+
+Standardize navigation language. The app currently mixes Back, Back home, Choose your next move, and Start Scrolling. That makes the hierarchy feel softer than it should. Pick a consistent section vocabulary and keep it everywhere.
+
+Code organization
+
+Extract page data into section hooks. Feed, Stats, and Settings each own fetch logic and UI state directly in the page component: FeedScreen.tsx, Stats.tsx, Settings.tsx. Move those into useFeedSession, useStatsSummary, useProfileSettings, etc.
+
+Add an authenticated app layout layer. Instead of each page inventing its own header/back action, create a dedicated signed-in layout around the RequireVerifiedAuth routes in App.tsx.
+
+Group onboarding/auth routes separately from core app routes. The route file is still manageable, but the auth/onboarding/core distinctions are already strong enough that they should probably be expressed as separate route modules.
+
+Current browser findings worth cleaning up
+
+Duplicate logged-out POST /auth/refresh 400 calls still happen on first load, which suggests bootstrap/session hydration is noisier than it needs to be.
+
+There are still duplicate API calls in dev for auth/refresh, messages, tutorial/status, feed/resume, stats/summary, and users/me. Most look like StrictMode double-mount behavior.
+
+When the app is opened from http://127.0.0.1:5173 instead of http://localhost:5173, auth/session behavior can diverge if VITE_API_BASE_URL is pinned to localhost in .env.local.
+
+Settings is functionally overloaded. Even when it works, it currently acts as account center, verification center, notification center, and destructive actions page all at once.
+
+Feed/stats/settings generally looked visually solid on desktop and mobile once the local auth flow was healthy.
+
+npm run build passed during this session.

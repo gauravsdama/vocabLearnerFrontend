@@ -9,10 +9,18 @@
     "skipLibCheck": true
   },
   "include": [
+    "src/vite-env.d.ts",
     "src/api/signing.ts",
     "src/utils/learningTargets.ts",
     "src/utils/messageUtils.ts",
     "src/feed/progressState.ts",
     "tests/**/*.ts"
+  ],
+  "exclude": [
+    "tests/api-client.security.test.ts",
+    "tests/auth-guards.test.tsx",
+    "tests/contract-test.test.ts",
+    "tests/diagnostics.test.ts",
+    "tests/playwright/**"
   ]
 }

@@ -1,6 +1,6 @@
 import { getApiBaseUrl, normalizeBaseUrl } from "../api/config";
 
-const REQUIRED_ROUTES = [
+export const REQUIRED_ROUTES = [
   { method: "post", path: "/api/v1/auth/register" },
   { method: "post", path: "/api/v1/auth/login" },
   { method: "get", path: "/api/v1/auth/me" },
@@ -28,6 +28,29 @@ const REQUIRED_ROUTES = [
   { method: "get", path: "/api/v1/study/progress/{word_id}/quiz-attempts" },
 ];
 
+export function findMissingRoutes(
+  paths: Record<string, Record<string, unknown>> | undefined,
+) {
+  if (!paths) {
+    return REQUIRED_ROUTES.map(
+      (route) => `${route.method.toUpperCase()} ${route.path}`,
+    );
+  }
+
+  const missing: string[] = [];
+  REQUIRED_ROUTES.forEach((route) => {
+    const pathItem = paths[route.path];
+    const hasMethod =
+      pathItem &&
+      typeof pathItem === "object" &&
+      route.method in pathItem;
+    if (!hasMethod) {
+      missing.push(`${route.method.toUpperCase()} ${route.path}`);
+    }
+  });
+  return missing;
+}
+
 export async function runContractTest() {
   const normalizedBase = normalizeBaseUrl(getApiBaseUrl());
   const url = normalizedBase ? `${normalizedBase}/openapi.json` : "/openapi.json";
@@ -50,18 +73,7 @@ export async function runContractTest() {
       return;
     }
 
-    const missing: string[] = [];
-    REQUIRED_ROUTES.forEach((route) => {
-      const pathItem = data.paths?.[route.path];
-      const hasMethod =
-        pathItem &&
-        typeof pathItem === "object" &&
-        route.method in pathItem;
-      if (!hasMethod) {
-        missing.push(`${route.method.toUpperCase()} ${route.path}`);
-      }
-    });
-
+    const missing = findMissingRoutes(data.paths);
     if (missing.length > 0) {
       console.warn(
         `[contract-test] Missing routes:\n${missing.join("\n")}`,

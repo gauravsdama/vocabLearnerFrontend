@@ -10,18 +10,15 @@ npm install
 
 For the full auth setup and provider-console steps, see `AUTH_SETUP_GUIDE.md`.
 
-Create a `.env.local` file in the project root (recommended for dev overrides):
+Copy `.env.example` to `.env.local` in the project root for dev overrides:
 
 ```bash
 VITE_API_BASE_URL=http://localhost:8000
 VITE_GOOGLE_CLIENT_ID=xxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
 ```
 
-For production builds, use `.env.production`:
-
-```bash
-VITE_API_BASE_URL=https://vocab-backend-219277558905.us-central1.run.app
-```
+For local production-like overrides, use uncommitted `.env.production.local`.
+Deployment environments should provide production env vars directly instead of relying on committed env files.
 
 ## Run
 
@@ -50,8 +47,9 @@ npm run dev
 - Profile endpoints: `GET/PATCH /users/me`, `POST /users/me/sms/opt-in`, `POST /users/me/sms/opt-out`.
 - Stats endpoint: `GET /stats/summary`.
 - Feed endpoints: `/feed/start`, `/feed/resume`, `/feed/{feed_session_id}/next`, `/feed/mark_viewed`, `/feed/mark_skipped`, `/feed/end`.
-- Auth endpoints: `/auth/register`, `/auth/login`, `/auth/me` with `Authorization: Bearer <access_token>`.
+- Auth endpoints: `/auth/register`, `/auth/login`, `/auth/refresh`, `/auth/me`.
 - Auth pages: `/login`, `/register`, `/check-email`, `/verify-email`, `/email-verified`, `/forgot-password`, `/reset-password`
-- Access and refresh tokens are stored in `localStorage`.
+- Web auth uses httpOnly backend cookies for access/refresh tokens. The frontend keeps the access token only in React state and stores the per-session request signing key in `sessionStorage`.
 - Client logging always writes to the browser console in all environments.
 - To enable the dev-only diagnostics button on login/register errors, set `VITE_TRACE_UI=true`.
+- Keep real local values in `.env.local` or `.env.production.local`; do not commit them.

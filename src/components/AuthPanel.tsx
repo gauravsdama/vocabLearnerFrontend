@@ -122,6 +122,7 @@ export default function AuthPanel({ initialMode = "login" }: AuthPanelProps) {
               type="text"
               value={displayName}
               onChange={(event) => setDisplayName(event.target.value)}
+              autoComplete="name"
               placeholder="What should we call you?"
               className="ds-input"
             />
@@ -134,6 +135,7 @@ export default function AuthPanel({ initialMode = "login" }: AuthPanelProps) {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
+            autoComplete="email"
             placeholder="you@example.com"
             className="ds-input"
           />
@@ -146,6 +148,7 @@ export default function AuthPanel({ initialMode = "login" }: AuthPanelProps) {
             onChange={(event) => setPassword(event.target.value)}
             required
             minLength={isLogin ? undefined : 8}
+            autoComplete={isLogin ? "current-password" : "new-password"}
             placeholder={isLogin ? "********" : "Create a strong password"}
             className="ds-input"
           />

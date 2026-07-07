@@ -44,6 +44,7 @@ export default function ForgotPassword() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               required
+              autoComplete="email"
               placeholder="you@example.com"
               className="ds-input"
             />
