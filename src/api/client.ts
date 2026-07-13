@@ -15,6 +15,7 @@ type TokenRefreshHandler = () => Promise<boolean>;
 type RequestBehavior = {
   omitAuth?: boolean;
   skipAuthRefresh?: boolean;
+  suppressErrorLog?: boolean;
 };
 
 let unauthorizedHandler: UnauthorizedHandler | null = null;
@@ -243,18 +244,20 @@ async function apiRequest<T>(
         (json as ApiErrorShape).error.request_id) ||
       requestId ||
       null;
-    logError("WEB_API_ERR", "API error", {
-      client_request_id: clientRequestId,
-      server_request_id: serverRequestId,
-      method,
-      url,
-      status: response.status,
-      duration_ms: durationMs,
-      error:
-        json && typeof json === "object" && "error" in json
-          ? (json as ApiErrorShape).error
-          : { message: text || "Unexpected error" },
-    });
+    if (!behavior.suppressErrorLog) {
+      logError("WEB_API_ERR", "API error", {
+        client_request_id: clientRequestId,
+        server_request_id: serverRequestId,
+        method,
+        url,
+        status: response.status,
+        duration_ms: durationMs,
+        error:
+          json && typeof json === "object" && "error" in json
+            ? (json as ApiErrorShape).error
+            : { message: text || "Unexpected error" },
+      });
+    }
     const parsedError = parseError(
       response.status,
       json,

@@ -172,6 +172,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const response = await apiPost<AuthResponse>("/auth/refresh", payload, {
           omitAuth: true,
           skipAuthRefresh: true,
+          suppressErrorLog: true,
         });
         applySession(response);
         return true;
