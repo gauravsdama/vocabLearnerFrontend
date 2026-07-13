@@ -200,6 +200,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let cancelled = false;
+    const skipInitialAuthHydration = location.pathname === "/demo";
+
+    if (skipInitialAuthHydration) {
+      setLoading(false);
+      return () => {
+        cancelled = true;
+      };
+    }
 
     async function hydrateSession() {
       // Auth tokens live in httpOnly cookies — no localStorage to check.
@@ -234,7 +242,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [clearSessionState, refreshCurrentUser, refreshSession]);
+  }, [clearSessionState, location.pathname, refreshCurrentUser, refreshSession]);
 
   useEffect(() => {
     if (!token || !isVerified(user)) {
