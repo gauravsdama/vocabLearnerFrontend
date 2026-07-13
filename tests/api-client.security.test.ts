@@ -66,4 +66,25 @@ describe("api client security behavior", () => {
     expect(clearAuthStorage).toHaveBeenCalledTimes(1);
     expect(unauthorizedHandler).toHaveBeenCalledTimes(1);
   });
+
+  it("adds the in-memory bearer token to authenticated requests", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const client = await import("../src/api/client");
+    client.setAuthToken("access-token-123");
+
+    await client.apiPost("/auth/resend-verification");
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const init = fetchMock.mock.calls[0][1] as RequestInit;
+    expect((init.headers as Record<string, string>).Authorization).toBe(
+      "Bearer access-token-123",
+    );
+  });
 });

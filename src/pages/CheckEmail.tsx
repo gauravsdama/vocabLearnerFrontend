@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import AppShell from "../components/AppShell";
 import Button from "../components/Button";
 import Card from "../components/Card";
@@ -8,12 +8,22 @@ import Toast from "../components/Toast";
 import { useAuth } from "../auth/AuthContext";
 import { getErrorMessage } from "../utils/apiError";
 
+type CheckEmailLocationState = {
+  verificationCodeSent?: boolean;
+} | null;
+
 export default function CheckEmail() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, resendVerification, verifyEmailCode, logout, refreshCurrentUser } = useAuth();
+  const initialCodeSent = Boolean(
+    (location.state as CheckEmailLocationState)?.verificationCodeSent,
+  );
   const [code, setCode] = useState("");
-  const [codeEntryVisible, setCodeEntryVisible] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  const [codeEntryVisible, setCodeEntryVisible] = useState(initialCodeSent);
+  const [message, setMessage] = useState<string | null>(
+    initialCodeSent ? "Email verification code sent. Check your inbox." : null,
+  );
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [verifying, setVerifying] = useState(false);

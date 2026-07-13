@@ -12,6 +12,7 @@ import {
   apiDelete,
   apiGet,
   apiPost,
+  setAuthToken,
   setTokenRefreshHandler,
   setUnauthorizedHandler,
 } from "../api/client";
@@ -21,6 +22,7 @@ import type {
   ForgotPasswordRequest,
   GoogleAuthRequest,
   LoginRequest,
+  LogoutRequest,
   MessageResponse,
   RefreshRequest,
   RegisterRequest,
@@ -75,9 +77,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [tutorialCompleted, setTutorialCompleted] = useState<boolean | null>(null);
   const tutorialCheckInFlight = useRef(false);
   const refreshPromiseRef = useRef<Promise<boolean> | null>(null);
+  const refreshTokenRef = useRef<string | null>(null);
 
   const clearSessionState = useCallback(() => {
     clearAuthStorage();
+    setAuthToken(null);
+    refreshTokenRef.current = null;
     setToken(null);
     setUser(null);
     setTutorialCompleted(null);
@@ -86,12 +91,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const applySession = useCallback((response: AuthResponse) => {
     // Tokens live in httpOnly cookies (set by the server) — never in localStorage.
     // We keep the access token in React state only for in-memory session tracking,
-    // and the signing key in sessionStorage for request signing.
+    // as a Bearer fallback for split-domain deployments, and the signing key in
+    // sessionStorage for request signing.
     if (response.client_signing_key) {
       setClientSigningKey(response.client_signing_key);
     } else {
       clearClientSigningKey();
     }
+    setAuthToken(response.access_token);
+    refreshTokenRef.current = response.refresh_token || null;
     setToken(response.access_token);
     setUser(response.user);
     if (response.user.email_verified === false) {
@@ -158,9 +166,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     const promise = (async () => {
       try {
-        // No refresh token in JS memory — the backend reads it from the
-        // httpOnly vocab_refresh_token cookie automatically.
-        const payload: RefreshRequest = {};
+        const payload: RefreshRequest = {
+          refresh_token: refreshTokenRef.current,
+        };
         const response = await apiPost<AuthResponse>("/auth/refresh", payload, {
           omitAuth: true,
           skipAuthRefresh: true,
@@ -199,7 +207,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // If the refresh cookie is absent or expired the server returns 401
       // and we fall through to the unauthenticated state.
       try {
-        const payload: RefreshRequest = {};
+        const payload: RefreshRequest = {
+          refresh_token: refreshTokenRef.current,
+        };
         const response = await apiPost<AuthResponse>("/auth/refresh", payload, {
           omitAuth: true,
           skipAuthRefresh: true,
@@ -308,7 +318,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         url: "/auth/register",
       });
       if (!isVerified(nextUser)) {
-        navigate("/check-email", { replace: true });
+        navigate("/check-email", {
+          replace: true,
+          state: { verificationCodeSent: true },
+        });
         return;
       }
       await navigateAfterVerifiedAuth();
@@ -348,11 +361,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = useCallback(async () => {
     try {
-      // Refresh token is in the httpOnly cookie — backend reads it from there.
-      // Empty body is intentional; no token to send from JS.
+      const payload: LogoutRequest = {
+        refresh_token: refreshTokenRef.current,
+      };
       await apiPost<MessageResponse>(
         "/auth/logout",
-        {},
+        payload,
         { skipAuthRefresh: true },
       );
     } catch {

@@ -3,13 +3,13 @@
  *
  * Security model:
  * - access_token and refresh_token are stored as httpOnly cookies by the
- *   backend. They are never readable by JavaScript, preventing XSS-based
- *   token theft.
+ *   backend for durable sessions.
+ * - access_token and refresh_token are also held in React refs/state only
+ *   while the tab is open. This lets split-domain deployments send Bearer
+ *   auth when browser cookie policy blocks cross-site API cookies.
  * - client_signing_key is a per-session HMAC key used to sign API requests.
  *   It is stored in sessionStorage (cleared when the tab/window closes) rather
  *   than localStorage so it is not persisted across sessions.
- * - The access token value is also held in React state (in-memory only) so
- *   that the signing logic can verify a session is active.
  */
 
 const CLIENT_SIGNING_KEY = "vocab_client_signing_key";

@@ -19,6 +19,7 @@ type RequestBehavior = {
 
 let unauthorizedHandler: UnauthorizedHandler | null = null;
 let tokenRefreshHandler: TokenRefreshHandler | null = null;
+let authToken: string | null = null;
 
 export function setUnauthorizedHandler(handler: UnauthorizedHandler) {
   unauthorizedHandler = handler;
@@ -26,6 +27,10 @@ export function setUnauthorizedHandler(handler: UnauthorizedHandler) {
 
 export function setTokenRefreshHandler(handler: TokenRefreshHandler | null) {
   tokenRefreshHandler = handler;
+}
+
+export function setAuthToken(token: string | null) {
+  authToken = token;
 }
 
 function buildUrl(path: string) {
@@ -92,17 +97,24 @@ function createClientRequestId() {
 }
 
 function sanitizeHeaders(headers: HeadersInit) {
+  const redact = (entries: Record<string, string>) =>
+    Object.fromEntries(
+      Object.entries(entries).map(([key, value]) => [
+        key,
+        key.toLowerCase() === "authorization" ? "[REDACTED]" : value,
+      ]),
+    );
   if (headers instanceof Headers) {
     const entries: Record<string, string> = {};
     headers.forEach((value, key) => {
       entries[key] = value;
     });
-    return entries;
+    return redact(entries);
   }
   if (Array.isArray(headers)) {
-    return Object.fromEntries(headers);
+    return redact(Object.fromEntries(headers));
   }
-  return headers as Record<string, string>;
+  return redact(headers as Record<string, string>);
 }
 
 function sanitizeBody(body: BodyInit | null | undefined): unknown {
@@ -141,12 +153,12 @@ async function apiRequest<T>(
   const clientRequestId = createClientRequestId();
   const startedAt = performance.now();
   const signingKey = behavior.omitAuth ? null : getClientSigningKey();
+  const bearerToken = behavior.omitAuth ? null : authToken;
   const method = options.method ?? "GET";
   const url = buildUrl(path);
   const bodyText = typeof options.body === "string" ? options.body : "";
-  // Sign when we have a signing key. Auth token is carried by the httpOnly
-  // cookie automatically; we only check signingKey (not an in-memory token)
-  // because the token is no longer stored in JS memory.
+  // Sign when we have a signing key. Bearer auth is added separately so
+  // split-domain deployments do not depend on browser cross-site cookies.
   const shouldSign =
     Boolean(signingKey) && !behavior.omitAuth && method !== "GET" && method !== "HEAD";
   const signatureHeaders =
@@ -161,6 +173,7 @@ async function apiRequest<T>(
   const headers: HeadersInit = {
     Accept: "application/json",
     ...(options.body ? { "Content-Type": "application/json" } : {}),
+    ...(bearerToken ? { Authorization: `Bearer ${bearerToken}` } : {}),
     ...signatureHeaders,
     ...options.headers,
   };
