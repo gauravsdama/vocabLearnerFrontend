@@ -50,12 +50,17 @@ type CardRendererProps = {
   onSkip: () => void;
   onProgressUpdate: (cardId: string, progress?: Progress) => void;
   isActive: boolean;
+  onQuizSubmit?: (
+    card: QuizCard,
+    selectedIndex: number,
+  ) => Promise<QuizSubmitResponse> | QuizSubmitResponse;
 };
 
 export default function CardRenderer({
   card,
   onSkip,
   onProgressUpdate,
+  onQuizSubmit,
 }: CardRendererProps) {
   const [toast, setToast] = useState<string | null>(null);
   const cardAccent =
@@ -96,6 +101,7 @@ export default function CardRenderer({
               card={card}
               onProgressUpdate={onProgressUpdate}
               onToast={setToast}
+              onQuizSubmit={onQuizSubmit}
             />
           ) : (
             <SentenceCardView
@@ -168,10 +174,15 @@ function QuizCardView({
   card,
   onProgressUpdate,
   onToast,
+  onQuizSubmit,
 }: {
   card: QuizCard;
   onProgressUpdate: (cardId: string, progress?: Progress) => void;
   onToast: (message: string | null) => void;
+  onQuizSubmit?: (
+    card: QuizCard,
+    selectedIndex: number,
+  ) => Promise<QuizSubmitResponse> | QuizSubmitResponse;
 }) {
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -205,26 +216,12 @@ function QuizCardView({
     }
     setLoading(true);
     try {
-      logInfo("WEB_QUIZ_SUBMIT_START", "Quiz submit started", {
-        method: "POST",
-        url: "/quiz/submit",
-        feed_card_id: card.card_id,
-        question_id: card.quiz.question_id,
-      });
-      const response = await apiPost<QuizSubmitResponse>("/quiz/submit", {
-        feed_card_id: card.card_id,
-        question_id: card.quiz.question_id,
-        chosen_index: selected,
-      });
+      const response = onQuizSubmit
+        ? await onQuizSubmit(card, selected)
+        : await submitQuizToApi(card, selected);
       setResult(response);
       onProgressUpdate(card.card_id, response.updated_progress);
       setIndex(2);
-      logInfo("WEB_QUIZ_SUBMIT_OK", "Quiz submit succeeded", {
-        method: "POST",
-        url: "/quiz/submit",
-        status: 200,
-        feed_card_id: card.card_id,
-      });
     } catch (err) {
       logError("WEB_QUIZ_SUBMIT_FAIL", "Quiz submit failed", {
         method: "POST",
@@ -307,6 +304,27 @@ function QuizCardView({
   ];
 
   return <Subpages pages={pages} index={index} onChange={setIndex} />;
+}
+
+async function submitQuizToApi(card: QuizCard, selected: number) {
+  logInfo("WEB_QUIZ_SUBMIT_START", "Quiz submit started", {
+    method: "POST",
+    url: "/quiz/submit",
+    feed_card_id: card.card_id,
+    question_id: card.quiz.question_id,
+  });
+  const response = await apiPost<QuizSubmitResponse>("/quiz/submit", {
+    feed_card_id: card.card_id,
+    question_id: card.quiz.question_id,
+    chosen_index: selected,
+  });
+  logInfo("WEB_QUIZ_SUBMIT_OK", "Quiz submit succeeded", {
+    method: "POST",
+    url: "/quiz/submit",
+    status: 200,
+    feed_card_id: card.card_id,
+  });
+  return response;
 }
 
 function SentenceCardView({

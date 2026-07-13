@@ -3,9 +3,10 @@ import { ctaSection } from "./content";
 
 type CTASectionProps = {
   onGetStarted: () => void;
+  onViewDemo: () => void;
 };
 
-export default function CTASection({ onGetStarted }: CTASectionProps) {
+export default function CTASection({ onGetStarted, onViewDemo }: CTASectionProps) {
   return (
     <section className="marketing-section marketing-cta-section" aria-labelledby="cta-title">
       <div className="marketing-shell">
@@ -21,9 +22,9 @@ export default function CTASection({ onGetStarted }: CTASectionProps) {
             <Button size="lg" onClick={onGetStarted}>
               {ctaSection.primaryCta}
             </Button>
-            <a className="marketing-link-button" href="#how-it-works">
+            <button type="button" className="marketing-link-button" onClick={onViewDemo}>
               {ctaSection.secondaryCta}
-            </a>
+            </button>
           </div>
         </div>
       </div>

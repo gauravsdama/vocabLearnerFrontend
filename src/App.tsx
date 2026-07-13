@@ -20,6 +20,7 @@ const Settings = lazy(() => import("./pages/Settings"));
 const SmsConsent = lazy(() => import("./pages/SmsConsent"));
 const Stats = lazy(() => import("./pages/Stats"));
 const FeedScreen = lazy(() => import("./feed/FeedScreen"));
+const DemoFeed = lazy(() => import("./pages/DemoFeed"));
 
 export default function App() {
   return (
@@ -72,6 +73,7 @@ export default function App() {
             path="/"
             element={<Intro />}
           />
+          <Route path="/demo" element={<DemoFeed />} />
           <Route
             path="/dashboard"
             element={

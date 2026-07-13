@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import AuthPanel from "../components/AuthPanel";
 import Modal from "../components/Modal";
@@ -17,6 +17,7 @@ import "../marketing.css";
 type AuthMode = "login" | "register";
 
 export default function Intro() {
+  const navigate = useNavigate();
   const { token, user, loading } = useAuth();
   const [authOpen, setAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>("register");
@@ -52,7 +53,10 @@ export default function Intro() {
           <HabitSection />
           <ReminderSummarySection />
           <AudienceValueSection />
-          <CTASection onGetStarted={() => openAuth("register")} />
+          <CTASection
+            onGetStarted={() => openAuth("register")}
+            onViewDemo={() => navigate("/demo")}
+          />
         </main>
       </div>
 
