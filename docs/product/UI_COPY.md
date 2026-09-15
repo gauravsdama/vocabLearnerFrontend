@@ -105,19 +105,20 @@ This table is a source-extracted snapshot of current wording. Review changes; do
 | `web.src.feed.feedscreen.013` | `src/feed/FeedScreen.tsx:506` | text | Start New Session |
 | `web.src.feed.feedscreen.014` | `src/feed/FeedScreen.tsx:509` | text | Back to Home |
 | `web.src.pages.accessibility.001` | `src/pages/Accessibility.tsx:7` | attr-title | Accessibility Statement |
-| `web.src.pages.accessibility.002` | `src/pages/Accessibility.tsx:11` | text | Our commitment |
-| `web.src.pages.accessibility.003` | `src/pages/Accessibility.tsx:13` | text | VocabCat is working toward conformance with the Web Content Accessibility Guidelines (WCAG) 2.2 Level AA. Accessibility is an ongoing practice, and this statement does not claim that every screen or assistive-technology combination is currently free of barriers. |
-| `web.src.pages.accessibility.004` | `src/pages/Accessibility.tsx:21` | text | Measures we take |
-| `web.src.pages.accessibility.005` | `src/pages/Accessibility.tsx:23` | text | semantic headings, landmarks, labels, and keyboard-operable controls; |
-| `web.src.pages.accessibility.006` | `src/pages/Accessibility.tsx:24` | text | visible keyboard focus and a skip-to-content link; |
-| `web.src.pages.accessibility.007` | `src/pages/Accessibility.tsx:25` | text | text alternatives for meaningful images; |
-| `web.src.pages.accessibility.008` | `src/pages/Accessibility.tsx:26` | text | support for reduced-motion preferences and responsive text; |
-| `web.src.pages.accessibility.009` | `src/pages/Accessibility.tsx:27` | text | clear form instructions, validation states, and status messages; and |
-| `web.src.pages.accessibility.010` | `src/pages/Accessibility.tsx:28` | text | browser and automated checks during frontend changes. |
-| `web.src.pages.accessibility.011` | `src/pages/Accessibility.tsx:33` | text | Known limitations |
-| `web.src.pages.accessibility.012` | `src/pages/Accessibility.tsx:35` | text | Some complex feed interactions and third-party sign-in controls may behave differently across screen readers and browsers. We continue to test these areas and prioritize fixes that block access to core learning or account functions. |
-| `web.src.pages.accessibility.013` | `src/pages/Accessibility.tsx:42` | text | Feedback |
-| `web.src.pages.accessibility.014` | `src/pages/Accessibility.tsx:44` | text | If a disability-related barrier prevents you from using VocabCat, please report the affected screen, what you were trying to do, and your browser or assistive technology through Help &amp; Support in the VocabCat app or the public support contact listed where you obtained VocabCat. We will review the report and work toward a reasonable solution. |
+| `web.src.pages.accessibility.002` | `src/pages/Accessibility.tsx:8` | attr-effectiveDate | September 15, 2026 |
+| `web.src.pages.accessibility.003` | `src/pages/Accessibility.tsx:11` | text | Our commitment |
+| `web.src.pages.accessibility.004` | `src/pages/Accessibility.tsx:13` | text | VocabCat is working toward conformance with the Web Content Accessibility Guidelines (WCAG) 2.2 Level AA. Accessibility is an ongoing practice, and this statement does not claim that every screen or assistive-technology combination is currently free of barriers. |
+| `web.src.pages.accessibility.005` | `src/pages/Accessibility.tsx:21` | text | Measures we take |
+| `web.src.pages.accessibility.006` | `src/pages/Accessibility.tsx:23` | text | semantic headings, landmarks, labels, and keyboard-operable controls; |
+| `web.src.pages.accessibility.007` | `src/pages/Accessibility.tsx:24` | text | visible keyboard focus and a skip-to-content link; |
+| `web.src.pages.accessibility.008` | `src/pages/Accessibility.tsx:25` | text | text alternatives for meaningful images; |
+| `web.src.pages.accessibility.009` | `src/pages/Accessibility.tsx:26` | text | support for reduced-motion preferences and responsive text; |
+| `web.src.pages.accessibility.010` | `src/pages/Accessibility.tsx:27` | text | clear form instructions, validation states, and status messages; and |
+| `web.src.pages.accessibility.011` | `src/pages/Accessibility.tsx:28` | text | browser and automated checks during frontend changes. |
+| `web.src.pages.accessibility.012` | `src/pages/Accessibility.tsx:33` | text | Known limitations |
+| `web.src.pages.accessibility.013` | `src/pages/Accessibility.tsx:35` | text | Some complex feed interactions and third-party sign-in controls may behave differently across screen readers and browsers. We continue to test these areas and prioritize fixes that block access to core learning or account functions. |
+| `web.src.pages.accessibility.014` | `src/pages/Accessibility.tsx:42` | text | Feedback |
+| `web.src.pages.accessibility.015` | `src/pages/Accessibility.tsx:44` | text | If a disability-related barrier prevents you from using VocabCat, please report the affected screen, what you were trying to do, and your browser or assistive technology through Help &amp; Support in the VocabCat app or the public support contact listed where you obtained VocabCat. We will review the report and work toward a reasonable solution. |
 | `web.src.pages.checkemail.001` | `src/pages/CheckEmail.tsx:41` | status | Email verification code sent to ${email}. |
 | `web.src.pages.checkemail.002` | `src/pages/CheckEmail.tsx:42` | status | Your email is already verified. |
 | `web.src.pages.checkemail.003` | `src/pages/CheckEmail.tsx:63` | status | Your account is still waiting for email verification. |
@@ -170,29 +171,30 @@ This table is a source-extracted snapshot of current wording. Review changes; do
 | `web.src.pages.home.008` | `src/pages/Home.tsx:102` | text | Stats & Summary |
 | `web.src.pages.home.009` | `src/pages/Home.tsx:103` | text | Track streaks, accuracy, and progress. |
 | `web.src.pages.privacy.001` | `src/pages/Privacy.tsx:5` | attr-title | Privacy Policy |
-| `web.src.pages.privacy.002` | `src/pages/Privacy.tsx:7` | text | Who this policy covers |
-| `web.src.pages.privacy.003` | `src/pages/Privacy.tsx:9` | text | This policy explains how VocabCat handles personal information when you use our website, learning app, accounts, reminders, and support features. VocabCat is intended for people age 13 and older. We do not knowingly allow children under 13 to create accounts. |
-| `web.src.pages.privacy.004` | `src/pages/Privacy.tsx:17` | text | Information we collect |
-| `web.src.pages.privacy.005` | `src/pages/Privacy.tsx:20` | text | Account information, such as email address, display name, password hash, authentication provider identifiers, profile image, and account status. |
-| `web.src.pages.privacy.006` | `src/pages/Privacy.tsx:24` | text | Learning information, such as words viewed, answers, quiz attempts, written practice sentences, scores, feedback, streaks, and progress. |
-| `web.src.pages.privacy.007` | `src/pages/Privacy.tsx:28` | text | Preferences, such as timezone, learning goals, feed choices, reminder frequency, phone number, and SMS consent status. |
-| `web.src.pages.privacy.008` | `src/pages/Privacy.tsx:32` | text | Support information, such as issue descriptions and basic device or app details you submit with a report. |
-| `web.src.pages.privacy.009` | `src/pages/Privacy.tsx:36` | text | Technical information needed to operate and secure the service, such as IP address, user agent, request identifiers, security events, and limited site-usage analytics. |
-| `web.src.pages.privacy.010` | `src/pages/Privacy.tsx:44` | text | How we use information |
-| `web.src.pages.privacy.011` | `src/pages/Privacy.tsx:46` | text | We use information to create and secure accounts, deliver vocabulary lessons, personalize review, measure progress, provide practice feedback, send requested reminders, provide support, prevent abuse, diagnose failures, and improve the service. We do not sell personal information or use it for targeted advertising. |
-| `web.src.pages.privacy.012` | `src/pages/Privacy.tsx:54` | text | Service providers |
-| `web.src.pages.privacy.013` | `src/pages/Privacy.tsx:56` | text | We use service providers to run VocabCat. These may include Google for sign-in, Google Cloud for backend hosting, Vercel for web hosting and limited analytics, Twilio for opted-in text messages and Resend for account email. They process information for the services they provide to us and under their own contractual and legal obligations. |
-| `web.src.pages.privacy.014` | `src/pages/Privacy.tsx:65` | text | Retention and deletion |
-| `web.src.pages.privacy.015` | `src/pages/Privacy.tsx:67` | text | We keep account and learning information while your account is active and as needed to provide the service, protect it, resolve disputes, and meet legal obligations. Retention periods may differ for security records, provider logs, and backups. You can permanently delete your account and associated application data from Settings. Some limited records may remain when law, fraud prevention, security, or backup-integrity requirements require it. |
-| `web.src.pages.privacy.016` | `src/pages/Privacy.tsx:77` | text | Your choices |
-| `web.src.pages.privacy.017` | `src/pages/Privacy.tsx:79` | text | Update learning and reminder preferences in Settings. |
-| `web.src.pages.privacy.018` | `src/pages/Privacy.tsx:80` | text | Opt out of SMS reminders in SMS settings or by replying STOP. |
-| `web.src.pages.privacy.019` | `src/pages/Privacy.tsx:81` | text | Delete your account and application data in Settings. |
-| `web.src.pages.privacy.020` | `src/pages/Privacy.tsx:82` | text | Use the in-app support feature for access, correction, or privacy requests. |
-| `web.src.pages.privacy.021` | `src/pages/Privacy.tsx:87` | text | Security and international processing |
-| `web.src.pages.privacy.022` | `src/pages/Privacy.tsx:89` | text | We use administrative, technical, and organizational safeguards designed to protect personal information. No system is completely secure. VocabCat and its providers may process information in the United States and other countries where they operate. |
-| `web.src.pages.privacy.023` | `src/pages/Privacy.tsx:97` | text | Changes and contact |
-| `web.src.pages.privacy.024` | `src/pages/Privacy.tsx:99` | text | We may update this policy as the service changes. We will update the effective date and provide additional notice when required. For privacy questions or requests, use Help &amp; Support in the VocabCat app. If you cannot access the app, use the public support contact listed in the store or website where you obtained VocabCat. |
+| `web.src.pages.privacy.002` | `src/pages/Privacy.tsx:5` | attr-effectiveDate | September 15, 2026 |
+| `web.src.pages.privacy.003` | `src/pages/Privacy.tsx:7` | text | Who this policy covers |
+| `web.src.pages.privacy.004` | `src/pages/Privacy.tsx:9` | text | This policy explains how VocabCat handles personal information when you use our website, learning app, accounts, reminders, and support features. VocabCat is intended for people age 13 and older. We do not knowingly allow children under 13 to create accounts. |
+| `web.src.pages.privacy.005` | `src/pages/Privacy.tsx:17` | text | Information we collect |
+| `web.src.pages.privacy.006` | `src/pages/Privacy.tsx:20` | text | Account information, such as email address, display name, password hash, authentication provider identifiers, profile image, and account status. |
+| `web.src.pages.privacy.007` | `src/pages/Privacy.tsx:24` | text | Learning information, such as words viewed, answers, quiz attempts, written practice sentences, scores, feedback, streaks, and progress. |
+| `web.src.pages.privacy.008` | `src/pages/Privacy.tsx:28` | text | Preferences, such as timezone, learning goals, feed choices, reminder frequency, phone number, and SMS consent status. |
+| `web.src.pages.privacy.009` | `src/pages/Privacy.tsx:32` | text | Support information, such as issue descriptions and basic device or app details you submit with a report. |
+| `web.src.pages.privacy.010` | `src/pages/Privacy.tsx:36` | text | Technical information needed to operate and secure the service, such as IP address, user agent, request identifiers, security events, and limited site-usage analytics. |
+| `web.src.pages.privacy.011` | `src/pages/Privacy.tsx:44` | text | How we use information |
+| `web.src.pages.privacy.012` | `src/pages/Privacy.tsx:46` | text | We use information to create and secure accounts, deliver vocabulary lessons, personalize review, measure progress, provide practice feedback, send requested reminders, provide support, prevent abuse, diagnose failures, and improve the service. We do not sell personal information or use it for targeted advertising. |
+| `web.src.pages.privacy.013` | `src/pages/Privacy.tsx:54` | text | Service providers |
+| `web.src.pages.privacy.014` | `src/pages/Privacy.tsx:56` | text | We use service providers to run VocabCat. These may include Google for sign-in, Google Cloud for backend hosting, Vercel for web hosting and limited analytics, Twilio for opted-in text messages and Resend for account email. They process information for the services they provide to us and under their own contractual and legal obligations. |
+| `web.src.pages.privacy.015` | `src/pages/Privacy.tsx:65` | text | Retention and deletion |
+| `web.src.pages.privacy.016` | `src/pages/Privacy.tsx:67` | text | We keep account and learning information while your account is active and as needed to provide the service, protect it, resolve disputes, and meet legal obligations. Retention periods may differ for security records, provider logs, and backups. You can permanently delete your account and associated application data from Settings. Some limited records may remain when law, fraud prevention, security, or backup-integrity requirements require it. |
+| `web.src.pages.privacy.017` | `src/pages/Privacy.tsx:77` | text | Your choices |
+| `web.src.pages.privacy.018` | `src/pages/Privacy.tsx:79` | text | Update learning and reminder preferences in Settings. |
+| `web.src.pages.privacy.019` | `src/pages/Privacy.tsx:80` | text | Opt out of SMS reminders in SMS settings or by replying STOP. |
+| `web.src.pages.privacy.020` | `src/pages/Privacy.tsx:81` | text | Delete your account and application data in Settings. |
+| `web.src.pages.privacy.021` | `src/pages/Privacy.tsx:82` | text | Use the in-app support feature for access, correction, or privacy requests. |
+| `web.src.pages.privacy.022` | `src/pages/Privacy.tsx:87` | text | Security and international processing |
+| `web.src.pages.privacy.023` | `src/pages/Privacy.tsx:89` | text | We use administrative, technical, and organizational safeguards designed to protect personal information. No system is completely secure. VocabCat and its providers may process information in the United States and other countries where they operate. |
+| `web.src.pages.privacy.024` | `src/pages/Privacy.tsx:97` | text | Changes and contact |
+| `web.src.pages.privacy.025` | `src/pages/Privacy.tsx:99` | text | We may update this policy as the service changes. We will update the effective date and provide additional notice when required. For privacy questions or requests, use Help &amp; Support in the VocabCat app. If you cannot access the app, use the public support contact listed in the store or website where you obtained VocabCat. |
 | `web.src.pages.resetpassword.001` | `src/pages/ResetPassword.tsx:29` | status | This reset link is missing a token. |
 | `web.src.pages.resetpassword.002` | `src/pages/ResetPassword.tsx:33` | status | Passwords do not match. |
 | `web.src.pages.resetpassword.003` | `src/pages/ResetPassword.tsx:51` | text | Password reset |
@@ -354,29 +356,30 @@ This table is a source-extracted snapshot of current wording. Review changes; do
 | `web.src.pages.stats.099` | `src/pages/Stats.tsx:1205` | text | Load more |
 | `web.src.pages.stats.100` | `src/pages/Stats.tsx:1213` | text | History |
 | `web.src.pages.terms.001` | `src/pages/Terms.tsx:5` | attr-title | Terms of Use |
-| `web.src.pages.terms.002` | `src/pages/Terms.tsx:7` | text | Agreement and eligibility |
-| `web.src.pages.terms.003` | `src/pages/Terms.tsx:9` | text | These Terms govern your use of VocabCat. By creating an account or using the service, you agree to these Terms and the Privacy Policy. You must be at least 13 years old. If local law requires you to be older to consent on your own, a parent or legal guardian must review and agree to these Terms for you. |
-| `web.src.pages.terms.004` | `src/pages/Terms.tsx:17` | text | Your account |
-| `web.src.pages.terms.005` | `src/pages/Terms.tsx:19` | text | Give us accurate information, keep your credentials secure, and tell us if you believe someone has accessed your account. You are responsible for activity performed through your account. You may delete your account through Settings. |
-| `web.src.pages.terms.006` | `src/pages/Terms.tsx:26` | text | Acceptable use |
-| `web.src.pages.terms.007` | `src/pages/Terms.tsx:27` | text | You may not: |
-| `web.src.pages.terms.008` | `src/pages/Terms.tsx:29` | text | break the law or violate another person’s rights; |
-| `web.src.pages.terms.009` | `src/pages/Terms.tsx:30` | text | interfere with, probe, scrape, or overload the service; |
-| `web.src.pages.terms.010` | `src/pages/Terms.tsx:31` | text | bypass access, usage, security, or rate limits; |
-| `web.src.pages.terms.011` | `src/pages/Terms.tsx:32` | text | submit malicious code or content you do not have the right to use; or |
-| `web.src.pages.terms.012` | `src/pages/Terms.tsx:33` | text | use VocabCat to harm, harass, impersonate, or deceive anyone. |
-| `web.src.pages.terms.013` | `src/pages/Terms.tsx:38` | text | Learning content |
-| `web.src.pages.terms.014` | `src/pages/Terms.tsx:40` | text | VocabCat provides educational practice, not professional advice or a guaranteed learning outcome. Definitions, questions, scores, summaries, and feedback may contain errors. You should use judgment and check important material against a reliable source. |
-| `web.src.pages.terms.015` | `src/pages/Terms.tsx:48` | text | Your content |
-| `web.src.pages.terms.016` | `src/pages/Terms.tsx:50` | text | You keep ownership of content you submit. You give VocabCat a limited permission to host, process, reproduce, and transmit that content only as needed to operate, secure, support, and improve the service. Do not submit sensitive information in learning exercises or content that violates another person’s rights. |
-| `web.src.pages.terms.017` | `src/pages/Terms.tsx:58` | text | Messages |
-| `web.src.pages.terms.018` | `src/pages/Terms.tsx:60` | text | Email needed for account security or service operation may be sent as part of your account. SMS study reminders are optional. Message frequency varies, message and data rates may apply, and consent is not a condition of purchase. Reply STOP to opt out or HELP for help. |
-| `web.src.pages.terms.019` | `src/pages/Terms.tsx:68` | text | Service changes and suspension |
-| `web.src.pages.terms.020` | `src/pages/Terms.tsx:70` | text | We may change, pause, or discontinue features. We may limit or suspend access when reasonably necessary to protect users or the service, investigate abuse, comply with law, or enforce these Terms. We will provide notice when reasonably practical and legally permitted. |
-| `web.src.pages.terms.021` | `src/pages/Terms.tsx:78` | text | Disclaimers and liability |
-| `web.src.pages.terms.022` | `src/pages/Terms.tsx:80` | text | To the extent allowed by law, VocabCat is provided “as is” and “as available,” without warranties of uninterrupted operation, accuracy, or fitness for a particular purpose. To the extent allowed by law, VocabCat is not liable for indirect, incidental, special, consequential, or punitive damages. Nothing in these Terms removes rights or remedies that cannot legally be limited. |
-| `web.src.pages.terms.023` | `src/pages/Terms.tsx:89` | text | Changes and contact |
-| `web.src.pages.terms.024` | `src/pages/Terms.tsx:91` | text | We may update these Terms and will post the effective date. If a change materially affects your rights, we will provide additional notice when required. Questions about these Terms can be submitted through Help &amp; Support in the VocabCat app or the public support contact listed where you obtained VocabCat. |
+| `web.src.pages.terms.002` | `src/pages/Terms.tsx:5` | attr-effectiveDate | September 15, 2026 |
+| `web.src.pages.terms.003` | `src/pages/Terms.tsx:7` | text | Agreement and eligibility |
+| `web.src.pages.terms.004` | `src/pages/Terms.tsx:9` | text | These Terms govern your use of VocabCat. By creating an account or using the service, you agree to these Terms and the Privacy Policy. You must be at least 13 years old. If local law requires you to be older to consent on your own, a parent or legal guardian must review and agree to these Terms for you. |
+| `web.src.pages.terms.005` | `src/pages/Terms.tsx:17` | text | Your account |
+| `web.src.pages.terms.006` | `src/pages/Terms.tsx:19` | text | Give us accurate information, keep your credentials secure, and tell us if you believe someone has accessed your account. You are responsible for activity performed through your account. You may delete your account through Settings. |
+| `web.src.pages.terms.007` | `src/pages/Terms.tsx:26` | text | Acceptable use |
+| `web.src.pages.terms.008` | `src/pages/Terms.tsx:27` | text | You may not: |
+| `web.src.pages.terms.009` | `src/pages/Terms.tsx:29` | text | break the law or violate another person’s rights; |
+| `web.src.pages.terms.010` | `src/pages/Terms.tsx:30` | text | interfere with, probe, scrape, or overload the service; |
+| `web.src.pages.terms.011` | `src/pages/Terms.tsx:31` | text | bypass access, usage, security, or rate limits; |
+| `web.src.pages.terms.012` | `src/pages/Terms.tsx:32` | text | submit malicious code or content you do not have the right to use; or |
+| `web.src.pages.terms.013` | `src/pages/Terms.tsx:33` | text | use VocabCat to harm, harass, impersonate, or deceive anyone. |
+| `web.src.pages.terms.014` | `src/pages/Terms.tsx:38` | text | Learning content |
+| `web.src.pages.terms.015` | `src/pages/Terms.tsx:40` | text | VocabCat provides educational practice, not professional advice or a guaranteed learning outcome. Definitions, questions, scores, summaries, and feedback may contain errors. You should use judgment and check important material against a reliable source. |
+| `web.src.pages.terms.016` | `src/pages/Terms.tsx:48` | text | Your content |
+| `web.src.pages.terms.017` | `src/pages/Terms.tsx:50` | text | You keep ownership of content you submit. You give VocabCat a limited permission to host, process, reproduce, and transmit that content only as needed to operate, secure, support, and improve the service. Do not submit sensitive information in learning exercises or content that violates another person’s rights. |
+| `web.src.pages.terms.018` | `src/pages/Terms.tsx:58` | text | Messages |
+| `web.src.pages.terms.019` | `src/pages/Terms.tsx:60` | text | Email needed for account security or service operation may be sent as part of your account. SMS study reminders are optional. Message frequency varies, message and data rates may apply, and consent is not a condition of purchase. Reply STOP to opt out or HELP for help. |
+| `web.src.pages.terms.020` | `src/pages/Terms.tsx:68` | text | Service changes and suspension |
+| `web.src.pages.terms.021` | `src/pages/Terms.tsx:70` | text | We may change, pause, or discontinue features. We may limit or suspend access when reasonably necessary to protect users or the service, investigate abuse, comply with law, or enforce these Terms. We will provide notice when reasonably practical and legally permitted. |
+| `web.src.pages.terms.022` | `src/pages/Terms.tsx:78` | text | Disclaimers and liability |
+| `web.src.pages.terms.023` | `src/pages/Terms.tsx:80` | text | To the extent allowed by law, VocabCat is provided “as is” and “as available,” without warranties of uninterrupted operation, accuracy, or fitness for a particular purpose. To the extent allowed by law, VocabCat is not liable for indirect, incidental, special, consequential, or punitive damages. Nothing in these Terms removes rights or remedies that cannot legally be limited. |
+| `web.src.pages.terms.024` | `src/pages/Terms.tsx:89` | text | Changes and contact |
+| `web.src.pages.terms.025` | `src/pages/Terms.tsx:91` | text | We may update these Terms and will post the effective date. If a change materially affects your rights, we will provide additional notice when required. Questions about these Terms can be submitted through Help &amp; Support in the VocabCat app or the public support contact listed where you obtained VocabCat. |
 | `web.src.pages.tutorial.001` | `src/pages/Tutorial.tsx:85` | attr-alt | A calm cat encouraging you to set a sustainable weekly pace. |
 | `web.src.pages.tutorial.002` | `src/pages/Tutorial.tsx:90` | text | Tutorial |
 | `web.src.pages.tutorial.003` | `src/pages/Tutorial.tsx:91` | text | Set your weekly targets. |
