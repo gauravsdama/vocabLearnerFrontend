@@ -53,3 +53,9 @@ npm run dev
 - Client logging always writes to the browser console in all environments.
 - To enable the dev-only diagnostics button on login/register errors, set `VITE_TRACE_UI=true`.
 - Keep real local values in `.env.local` or `.env.production.local`; do not commit them.
+
+## License
+
+The original source code is available under Apache-2.0. The VocabCat name and
+brand artwork remain reserved. See `LICENSE`, `NOTICE`, `ASSET_LICENSE.md`, and
+`THIRD_PARTY_NOTICES.md`.

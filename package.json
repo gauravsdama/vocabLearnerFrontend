@@ -2,7 +2,7 @@
   "name": "vocabcat-frontend",
   "private": true,
   "version": "0.1.0",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,6 +15,7 @@
     "copy:check": "node scripts/check-copy.mjs",
     "copy:inventory": "node scripts/inventory-ui-copy.mjs --write",
     "copy:inventory:check": "node scripts/inventory-ui-copy.mjs",
+    "license:check": "node scripts/check-licensing.mjs",
     "assets:check": "node scripts/check-asset-budget.mjs",
     "support-boundary:check": "node scripts/check-support-boundary.mjs",
     "audit:prod": "npm audit --omit=dev"

@@ -26,6 +26,7 @@ jobs:
       - run: npm run test:security
       - run: npm run copy:check
       - run: npm run copy:inventory:check
+      - run: npm run license:check
       - run: npm run assets:check
       - run: npm run support-boundary:check
       - run: npm run audit:prod
