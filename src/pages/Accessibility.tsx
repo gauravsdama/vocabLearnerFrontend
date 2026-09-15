@@ -5,7 +5,7 @@ export default function Accessibility() {
     <LegalDocument
       eyebrow="Accessibility"
       title="Accessibility Statement"
-      effectiveDate="September 4, 2026"
+      effectiveDate="September 15, 2026"
     >
       <section>
         <h2>Our commitment</h2>

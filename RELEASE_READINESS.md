@@ -25,10 +25,11 @@ This is VocabCat's web client and public product site for learners who want shor
 
 ## Blocking before publication
 
-- Approve a first-party license, add third-party notices/provenance, and reconcile the divergent checkout.
+- The proprietary license and notice are present, and the canonical checkout is published.
 - Deploy the current `vercel.json`, then verify CSP, frame restrictions, MIME sniffing protection, referrer policy, permissions policy, and HSTS on the live responses. The current deployment only exposes HSTS from that set.
-- Add a deterministic completeness check from the human-owned copy source to implemented runtime strings. Finish stable IDs and approval states for all routes, errors, empty states, and accessibility labels.
+- Deterministic copy checks cover 196 landing-page IDs and 373 source-extracted runtime strings.
 - The approved policy version is `2026-09-15`; the Terms and Privacy pages display September 15, 2026.
+- Legal publication remains blocked until the owner supplies and approves the legal operator name and contact, concrete retention/deletion periods, and the complete provider list (including a decision on Apple sign-in disclosure). Legal review must also confirm that the Terms' age wording expresses the intended strictly general-audience 13+ rule without implying access for children under 13.
 - Complete live QA for email, Google, Apple handoff, signed writes, logout, deletion, legal acceptance, responsive layouts, keyboard navigation, screen readers, and reduced motion.
 - Keep this release free-only; paid access and billing are out of scope.
 
