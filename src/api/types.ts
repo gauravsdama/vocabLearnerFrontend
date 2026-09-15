@@ -26,11 +26,17 @@ export type LoginRequest = {
 
 export type RegisterRequest = LoginRequest & {
   display_name?: string;
+  minimum_age_confirmed: boolean;
+  terms_version: string;
+  privacy_version: string;
 };
 
 export type GoogleAuthRequest = {
   credential: string;
   id_token?: string;
+  minimum_age_confirmed?: boolean;
+  terms_version?: string;
+  privacy_version?: string;
 };
 
 export type RefreshRequest = {

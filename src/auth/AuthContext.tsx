@@ -40,6 +40,7 @@ import {
   setClientSigningKey,
 } from "../utils/storage";
 import { clearLastAuthDiagnostic, setLastAuthDiagnostic } from "../utils/diagnostics";
+import type { PolicyAcceptance } from "./policy";
 
 type AuthContextValue = {
   token: string | null;
@@ -47,8 +48,8 @@ type AuthContextValue = {
   loading: boolean;
   needsEmailVerification: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (input: { email: string; password: string; displayName?: string }) => Promise<void>;
-  authenticateWithGoogle: (credential: string) => Promise<void>;
+  register: (input: { email: string; password: string; displayName?: string } & PolicyAcceptance) => Promise<void>;
+  authenticateWithGoogle: (credential: string, acceptance?: PolicyAcceptance) => Promise<void>;
   logout: () => Promise<void>;
   resendVerification: () => Promise<ResendEmailVerificationResponse>;
   verifyEmailCode: (code: string) => Promise<VerifyEmailResponse>;
@@ -306,7 +307,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [applySession, navigate, navigateAfterVerifiedAuth]);
 
-  const register = useCallback(async ({ email, password, displayName }: { email: string; password: string; displayName?: string }) => {
+  const register = useCallback(async ({ email, password, displayName, ...acceptance }: { email: string; password: string; displayName?: string } & PolicyAcceptance) => {
     clearLastAuthDiagnostic();
     logInfo("WEB_AUTH_REG_START", "Registration started", {
       method: "POST",
@@ -315,6 +316,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const payload: RegisterRequest = {
       email,
       password,
+      ...acceptance,
       ...(displayName ? { display_name: displayName } : {}),
     };
     try {
@@ -349,9 +351,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [applySession, navigate, navigateAfterVerifiedAuth]);
 
-  const authenticateWithGoogle = useCallback(async (credential: string) => {
+  const authenticateWithGoogle = useCallback(async (credential: string, acceptance?: PolicyAcceptance) => {
     clearLastAuthDiagnostic();
-    const payload: GoogleAuthRequest = { credential };
+    const payload: GoogleAuthRequest = { credential, ...acceptance };
     try {
       const response = await apiPost<AuthResponse>("/auth/google", payload, {
         omitAuth: true,

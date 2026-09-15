@@ -1,5 +1,5 @@
 import Button from "../Button";
-import { ctaSection } from "./content";
+import { copy, ctaSection } from "./content";
 
 type CTASectionProps = {
   onGetStarted: () => void;
@@ -11,7 +11,7 @@ export default function CTASection({ onGetStarted, onViewDemo }: CTASectionProps
     <section className="marketing-section marketing-cta-section" aria-labelledby="cta-title">
       <div className="marketing-shell">
         <div className="marketing-cta-panel">
-          <span className="ds-label">Get Started</span>
+          <span className="ds-label">{copy("cta.eyebrow")}</span>
           <h2 id="cta-title" className="marketing-section-title">
             {ctaSection.headline}
           </h2>

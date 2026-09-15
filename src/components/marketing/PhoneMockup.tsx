@@ -1,5 +1,5 @@
 import clsx from "../clsx";
-import { demoStates } from "./content";
+import { copy, demoStates } from "./content";
 
 type PhoneMockupProps = {
   activeIndex: number;
@@ -18,15 +18,15 @@ function renderScreen(stateId: (typeof demoStates)[number]["id"]) {
         <>
           <div className="phone-copy-card phone-animate delay-1">
             <div className="phone-copy-stack">
-              <p className="phone-word">Eloquent</p>
+              <p className="phone-word">{copy("phone.word.term")}</p>
               <p className="phone-definition">
-                Fluent, persuasive, and clear in speech or writing.
+                {copy("phone.word.definition")}
               </p>
             </div>
           </div>
           <div className="phone-mini-insight phone-animate delay-2">
-            <span className="phone-mini-label">Today&apos;s focus</span>
-            <strong>Read once. Recall once. Keep going.</strong>
+            <span className="phone-mini-label">{copy("phone.word.focusLabel")}</span>
+            <strong>{copy("phone.word.focusBody")}</strong>
           </div>
         </>
       );
@@ -35,14 +35,11 @@ function renderScreen(stateId: (typeof demoStates)[number]["id"]) {
         <>
           <div className="phone-copy-card phone-animate delay-1">
             <div className="phone-copy-stack">
-              <p className="phone-question">What does “eloquent” most nearly mean?</p>
+              <p className="phone-question">{copy("phone.question.prompt")}</p>
               <div className="phone-option-list">
-                {[
-                  "A. Confusing",
-                  "B. Persuasive",
-                  "C. Careless",
-                  "D. Ordinary",
-                ].map((option, index) => (
+                {Array.from({ length: 4 }, (_, index) =>
+                  copy(`phone.question.option.${index + 1}`),
+                ).map((option, index) => (
                   <div
                     key={option}
                     className={clsx(
@@ -63,13 +60,13 @@ function renderScreen(stateId: (typeof demoStates)[number]["id"]) {
         <>
           <div className="phone-feedback-banner phone-animate delay-1">
             <span className="phone-feedback-dot" aria-hidden />
-            Correct.
+            {copy("phone.feedback.status")}
           </div>
           <div className="phone-copy-card phone-animate delay-2">
             <div className="phone-copy-stack">
-              <p className="phone-feedback-text">“Eloquent” means persuasive and clear.</p>
+              <p className="phone-feedback-text">{copy("phone.feedback.title")}</p>
               <p className="phone-feedback-body">
-                The correct answer focuses on clear and persuasive communication.
+                {copy("phone.feedback.body")}
               </p>
             </div>
           </div>
@@ -80,22 +77,21 @@ function renderScreen(stateId: (typeof demoStates)[number]["id"]) {
         <>
           <div className="phone-copy-card phone-animate delay-1">
             <div className="phone-copy-stack">
-              <p className="phone-review-title">3 words ready for review</p>
-              <p className="phone-review-subtitle">Missed words return automatically</p>
+              <p className="phone-review-title">{copy("phone.review.title")}</p>
+              <p className="phone-review-subtitle">{copy("phone.review.subtitle")}</p>
             </div>
           </div>
           <div className="phone-review-list phone-animate delay-2">
-            {[
-              ["Eloquent", "Needs one more correct answer"],
-              ["Pragmatic", "Missed yesterday"],
-              ["Lucid", "Ready for a fast check-in"],
-            ].map(([word, meta]) => (
+            {Array.from({ length: 3 }, (_, index) => [
+              copy(`phone.review.item.${index + 1}.word`),
+              copy(`phone.review.item.${index + 1}.meta`),
+            ]).map(([word, meta]) => (
               <div key={word} className="phone-review-row">
                 <div>
                   <strong>{word}</strong>
                   <span>{meta}</span>
                 </div>
-                <span className="phone-review-chip">Review</span>
+                <span className="phone-review-chip">{copy("phone.review.action")}</span>
               </div>
             ))}
           </div>
@@ -108,23 +104,23 @@ function renderScreen(stateId: (typeof demoStates)[number]["id"]) {
             <div className="phone-notification-topline">
               <div className="phone-notification-app">
                 <span className="phone-notification-app-icon phone-notification-app-icon-mail" aria-hidden />
-                <span className="phone-notification-app-name">Mail</span>
+                <span className="phone-notification-app-name">{copy("phone.reminder.email.app")}</span>
               </div>
-              <span className="phone-notification-time">now</span>
+              <span className="phone-notification-time">{copy("phone.reminder.email.time")}</span>
             </div>
-            <strong>Your vocab review is ready.</strong>
-            <span>You have 5 words waiting for practice.</span>
+            <strong>{copy("phone.reminder.email.subject")}</strong>
+            <span>{copy("phone.reminder.email.body")}</span>
           </div>
           <div className="phone-notification phone-animate delay-2">
             <div className="phone-notification-topline">
               <div className="phone-notification-app">
                 <span className="phone-notification-app-icon phone-notification-app-icon-messages" aria-hidden />
-                <span className="phone-notification-app-name">Messages</span>
+                <span className="phone-notification-app-name">{copy("phone.reminder.sms.app")}</span>
               </div>
-              <span className="phone-notification-time">2m ago</span>
+              <span className="phone-notification-time">{copy("phone.reminder.sms.time")}</span>
             </div>
-            <strong>5 words are waiting today.</strong>
-            <span>Your daily vocab session is ready.</span>
+            <strong>{copy("phone.reminder.sms.subject")}</strong>
+            <span>{copy("phone.reminder.sms.body")}</span>
           </div>
         </>
       );
@@ -134,22 +130,22 @@ function renderScreen(stateId: (typeof demoStates)[number]["id"]) {
           <div className="phone-copy-card phone-animate delay-1">
             <div className="phone-summary-grid">
               <div className="phone-summary-stat">
-                <strong>18</strong>
-                <span>words reviewed this week</span>
+                <strong>{copy("phone.summary.stat.1.value")}</strong>
+                <span>{copy("phone.summary.stat.1.label")}</span>
               </div>
               <div className="phone-summary-stat">
-                <strong>7</strong>
-                <span>words improved</span>
+                <strong>{copy("phone.summary.stat.2.value")}</strong>
+                <span>{copy("phone.summary.stat.2.label")}</span>
               </div>
               <div className="phone-summary-stat">
-                <strong>6</strong>
-                <span>day streak</span>
+                <strong>{copy("phone.summary.stat.3.value")}</strong>
+                <span>{copy("phone.summary.stat.3.label")}</span>
               </div>
             </div>
           </div>
           <div className="phone-mini-insight phone-animate delay-2">
-            <span className="phone-mini-label">Next review</span>
-            <strong>3 words still need attention</strong>
+            <span className="phone-mini-label">{copy("phone.summary.nextLabel")}</span>
+            <strong>{copy("phone.summary.nextBody")}</strong>
           </div>
         </>
       );
@@ -171,13 +167,13 @@ export default function PhoneMockup({
       <div
         className="phone-frame"
         role="img"
-        aria-label={`Vocabcat app preview showing ${activeState.ariaLabel}.`}
+        aria-label={`${copy("phone.previewAriaPrefix")} ${activeState.ariaLabel}.`}
       >
         <div className="phone-shell">
           <div className="phone-island" aria-hidden />
           <div className="phone-screen">
             <div className="phone-statusbar" aria-hidden>
-              <span>9:41</span>
+              <span>{copy("phone.statusTime")}</span>
               <div className="phone-status-icons">
                 <span />
                 <span />

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import clsx from "../clsx";
 import PhoneMockup from "./PhoneMockup";
-import { demoStates } from "./content";
+import { copy, demoStates } from "./content";
 import { marketingReadCat } from "./marketingCats";
 
 function clamp(value: number, min: number, max: number) {
@@ -86,7 +86,7 @@ export default function ScrollDemoSection() {
         <div className="marketing-demo-sticky">
           <div className="marketing-demo-intro">
             <h2 id="how-it-works-title" className="marketing-section-title">
-              Meet your daily study partner.
+              {copy("demo.headline")}
             </h2>
             <div className="marketing-demo-progress" aria-hidden>
               <span
@@ -98,7 +98,7 @@ export default function ScrollDemoSection() {
           <PhoneMockup activeIndex={activeIndex} reducedMotion={reducedMotion} />
         </div>
 
-        <div className="marketing-demo-steps" aria-label="Demo walkthrough">
+        <div className="marketing-demo-steps" aria-label={copy("demo.walkthroughAriaLabel")}>
           {demoStates.map((state, index) => (
             <article
               key={state.id}
@@ -120,7 +120,9 @@ export default function ScrollDemoSection() {
                 </div>
               ) : null}
               <div className="marketing-demo-step-card">
-                <span className="marketing-demo-step-index">0{index + 1}</span>
+                <span className="marketing-demo-step-index">
+                  {copy(`demo.stepIndex.${index + 1}`)}
+                </span>
                 <div className="marketing-demo-step-copy">
                   <h3>{state.sideTitle}</h3>
                   <p>{state.sideBody}</p>

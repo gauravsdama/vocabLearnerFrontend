@@ -1,5 +1,5 @@
 import Card from "../Card";
-import { audienceSection } from "./content";
+import { audienceSection, copy } from "./content";
 
 export default function AudienceValueSection() {
   return (
@@ -12,7 +12,7 @@ export default function AudienceValueSection() {
         </div>
         <div className="marketing-audience-grid">
           <Card className="marketing-surface-card marketing-audience-card">
-            <h3>Students</h3>
+            <h3>{copy("audience.studentsTitle")}</h3>
             <ul className="marketing-checklist">
               {audienceSection.students.map((item) => (
                 <li key={item}>{item}</li>
@@ -20,7 +20,7 @@ export default function AudienceValueSection() {
             </ul>
           </Card>
           <Card className="marketing-surface-card marketing-audience-card">
-            <h3>Parents</h3>
+            <h3>{copy("audience.parentsTitle")}</h3>
             <ul className="marketing-checklist">
               {audienceSection.parents.map((item) => (
                 <li key={item}>{item}</li>

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { copy } from "./marketing/content";
 
 type GoogleLoginButtonProps = {
   onCredential: (credential: string) => Promise<void> | void;
@@ -20,7 +21,7 @@ export default function GoogleLoginButton({
   const [loadError, setLoadError] = useState<string | null>(null);
 
   if (!clientId) {
-    return <p className="helper">Google login is not configured.</p>;
+    return <p className="helper">{copy("auth.googleNotConfigured")}</p>;
   }
 
   const handleSuccess = async (response: CredentialResponse) => {
@@ -38,7 +39,7 @@ export default function GoogleLoginButton({
           onSuccess={(response) => {
             void handleSuccess(response);
           }}
-          onError={() => setLoadError("Google login failed. Please try again.")}
+          onError={() => setLoadError(copy("auth.googleTryAgain"))}
           theme="outline"
           size="large"
           text="continue_with"

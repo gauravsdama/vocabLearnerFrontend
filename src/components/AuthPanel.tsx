@@ -7,6 +7,8 @@ import Toast from "./Toast";
 import { useAuth } from "../auth/AuthContext";
 import { getErrorMessage } from "../utils/apiError";
 import { getLastAuthDiagnostic } from "../utils/diagnostics";
+import { copy } from "./marketing/content";
+import { currentPolicyAcceptance } from "../auth/policy";
 
 type AuthMode = "login" | "register";
 
@@ -23,9 +25,12 @@ export default function AuthPanel({ initialMode = "login" }: AuthPanelProps) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [ageConfirmed, setAgeConfirmed] = useState(false);
+  const [legalAccepted, setLegalAccepted] = useState(false);
   const showTraceUI =
     import.meta.env.DEV && import.meta.env.VITE_TRACE_UI === "true";
   const isLogin = mode === "login";
+  const registrationBlocked = !isLogin && (!ageConfirmed || !legalAccepted);
 
   const handleCopyDiagnostics = async () => {
     const diagnostic = getLastAuthDiagnostic();
@@ -41,6 +46,10 @@ export default function AuthPanel({ initialMode = "login" }: AuthPanelProps) {
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (registrationBlocked) {
+      setError(copy("auth.eligibilityError"));
+      return;
+    }
     setError(null);
     setLoading(true);
     try {
@@ -51,28 +60,46 @@ export default function AuthPanel({ initialMode = "login" }: AuthPanelProps) {
           email: email.trim(),
           password,
           displayName: displayName.trim() || undefined,
+          ...currentPolicyAcceptance(),
         });
       }
     } catch (err) {
-      setError(getErrorMessage(err, isLogin ? "Login failed" : "Registration failed"));
+      setError(
+        getErrorMessage(
+          err,
+          isLogin ? copy("auth.loginError") : copy("auth.registrationError"),
+        ),
+      );
       setLoading(false);
     }
   };
 
   const onGoogleCredential = async (credential: string) => {
+    if (registrationBlocked) {
+      setError(copy("auth.eligibilityError"));
+      return;
+    }
     setError(null);
     setGoogleLoading(true);
     try {
-      await authenticateWithGoogle(credential);
+      await authenticateWithGoogle(
+        credential,
+        isLogin ? undefined : currentPolicyAcceptance(),
+      );
     } catch (err) {
-      setError(getErrorMessage(err, isLogin ? "Google login failed" : "Google signup failed"));
+      setError(
+        getErrorMessage(
+          err,
+          isLogin ? copy("auth.googleLoginError") : copy("auth.googleSignupError"),
+        ),
+      );
       setGoogleLoading(false);
     }
   };
 
   return (
     <div className="auth-panel">
-      <div className="auth-tabs" role="tablist" aria-label="Authentication options">
+      <div className="auth-tabs" role="tablist" aria-label={copy("auth.tabsAriaLabel")}>
         <button
           type="button"
           className={isLogin ? "auth-tab auth-tab-active" : "auth-tab"}
@@ -80,7 +107,7 @@ export default function AuthPanel({ initialMode = "login" }: AuthPanelProps) {
           role="tab"
           aria-selected={isLogin}
         >
-          Log in
+          {copy("auth.loginTab")}
         </button>
         <button
           type="button"
@@ -89,7 +116,7 @@ export default function AuthPanel({ initialMode = "login" }: AuthPanelProps) {
           role="tab"
           aria-selected={!isLogin}
         >
-          Sign up
+          {copy("auth.signupTab")}
         </button>
       </div>
 
@@ -97,17 +124,19 @@ export default function AuthPanel({ initialMode = "login" }: AuthPanelProps) {
         <div className="form-mascot-row">
           <Mascot pose="peek_left" decorative size="md" className="form-mascot" />
           <div className="stack">
-            <span className="ds-label">{isLogin ? "Welcome back" : "Get started"}</span>
+            <span className="ds-label">
+              {isLogin ? copy("auth.loginEyebrow") : copy("auth.signupEyebrow")}
+            </span>
             <h1 className="ds-h2">
-              {isLogin ? "Log in to keep learning." : "Build a daily word habit."}
+              {isLogin ? copy("auth.loginHeadline") : copy("auth.signupHeadline")}
             </h1>
             {isLogin ? (
               <p className="helper">
-                Sign in quickly with your Google account or use email and password.
+                {copy("auth.loginBody")}
               </p>
             ) : (
               <p className="helper">
-                Start with a short setup, then let the feed and quizzes build the habit.
+                {copy("auth.signupBody")}
               </p>
             )}
           </div>
@@ -117,31 +146,31 @@ export default function AuthPanel({ initialMode = "login" }: AuthPanelProps) {
       <form onSubmit={onSubmit} className="form-stack">
         {!isLogin ? (
           <label className="field">
-            <span>Display name</span>
+            <span>{copy("auth.displayNameLabel")}</span>
             <input
               type="text"
               value={displayName}
               onChange={(event) => setDisplayName(event.target.value)}
               autoComplete="name"
-              placeholder="What should we call you?"
+              placeholder={copy("auth.displayNamePlaceholder")}
               className="ds-input"
             />
           </label>
         ) : null}
         <label className="field">
-          <span>Email</span>
+          <span>{copy("auth.emailLabel")}</span>
           <input
             type="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
             autoComplete="email"
-            placeholder="you@example.com"
+            placeholder={copy("auth.emailPlaceholder")}
             className="ds-input"
           />
         </label>
         <label className="field">
-          <span>Password</span>
+          <span>{copy("auth.passwordLabel")}</span>
           <input
             type="password"
             value={password}
@@ -149,36 +178,75 @@ export default function AuthPanel({ initialMode = "login" }: AuthPanelProps) {
             required
             minLength={isLogin ? undefined : 8}
             autoComplete={isLogin ? "current-password" : "new-password"}
-            placeholder={isLogin ? "********" : "Create a strong password"}
+            placeholder={
+              isLogin
+                ? copy("auth.loginPasswordPlaceholder")
+                : copy("auth.signupPasswordPlaceholder")
+            }
             className="ds-input"
           />
         </label>
-        <Button type="submit" fullWidth loading={loading} size="lg">
+        {!isLogin ? (
+          <fieldset className="auth-consent-group">
+            <legend>{copy("auth.eligibilityLegend")}</legend>
+            <label className="field-consent auth-consent-row">
+              <input
+                type="checkbox"
+                checked={ageConfirmed}
+                onChange={(event) => setAgeConfirmed(event.target.checked)}
+                required
+              />
+              <span>{copy("auth.ageConfirmation")}</span>
+            </label>
+            <label className="field-consent auth-consent-row">
+              <input
+                type="checkbox"
+                checked={legalAccepted}
+                onChange={(event) => setLegalAccepted(event.target.checked)}
+                required
+              />
+              <span>
+                {copy("auth.termsPrefix")} <Link to="/terms">{copy("auth.termsLabel")}</Link>{" "}
+                {copy("auth.termsJoiner")} <Link to="/privacy">{copy("auth.privacyLabel")}</Link>.
+              </span>
+            </label>
+          </fieldset>
+        ) : null}
+        <Button
+          type="submit"
+          fullWidth
+          loading={loading}
+          size="lg"
+          disabled={registrationBlocked}
+        >
           {loading
             ? isLogin
-              ? "Signing in..."
-              : "Creating..."
+              ? copy("auth.signingIn")
+              : copy("auth.creating")
             : isLogin
-              ? "Log in"
-              : "Create account"}
+              ? copy("auth.loginSubmit")
+              : copy("auth.signupSubmit")}
         </Button>
       </form>
 
       <div className="auth-link-row">
-        {isLogin ? <Link to="/forgot-password">Forgot your password?</Link> : null}
+        {isLogin ? <Link to="/forgot-password">{copy("auth.forgotPassword")}</Link> : null}
         <button
           type="button"
           className="auth-inline-switch"
           onClick={() => setMode(isLogin ? "register" : "login")}
         >
-          {isLogin ? "New here? Create an account" : "Have an account? Log in"}
+          {isLogin ? copy("auth.switchToSignup") : copy("auth.switchToLogin")}
         </button>
       </div>
 
       <div className="auth-divider" aria-hidden>
-        <span>or</span>
+        <span>{copy("auth.divider")}</span>
       </div>
-      <GoogleLoginButton onCredential={onGoogleCredential} disabled={googleLoading || loading} />
+      <GoogleLoginButton
+        onCredential={onGoogleCredential}
+        disabled={googleLoading || loading || registrationBlocked}
+      />
       {showTraceUI && error && getLastAuthDiagnostic() ? (
         <Button variant="ghost" type="button" onClick={handleCopyDiagnostics}>
           Copy diagnostics

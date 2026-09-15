@@ -21,6 +21,9 @@ const SmsConsent = lazy(() => import("./pages/SmsConsent"));
 const Stats = lazy(() => import("./pages/Stats"));
 const FeedScreen = lazy(() => import("./feed/FeedScreen"));
 const DemoFeed = lazy(() => import("./pages/DemoFeed"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Accessibility = lazy(() => import("./pages/Accessibility"));
 
 export default function App() {
   return (
@@ -74,6 +77,9 @@ export default function App() {
             element={<Intro />}
           />
           <Route path="/demo" element={<DemoFeed />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/accessibility" element={<Accessibility />} />
           <Route
             path="/dashboard"
             element={

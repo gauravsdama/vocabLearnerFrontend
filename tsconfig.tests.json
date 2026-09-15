@@ -14,6 +14,7 @@
     "src/utils/learningTargets.ts",
     "src/utils/messageUtils.ts",
     "src/feed/progressState.ts",
+    "src/auth/policy.ts",
     "tests/**/*.ts"
   ],
   "exclude": [
@@ -21,6 +22,7 @@
     "tests/auth-guards.test.tsx",
     "tests/contract-test.test.ts",
     "tests/diagnostics.test.ts",
+    "tests/vercel-config.test.ts",
     "tests/playwright/**"
   ]
 }

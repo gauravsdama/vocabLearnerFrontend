@@ -1,4 +1,4 @@
-# Vocabcat Frontend
+# VocabCat Frontend
 
 ## Setup
 

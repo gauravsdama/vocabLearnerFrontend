@@ -4,6 +4,50 @@
   isolation: isolate;
 }
 
+.marketing-footer {
+  position: relative;
+  z-index: 1;
+  padding: var(--s4) 0;
+  border-top: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.marketing-footer-inner,
+.marketing-footer-inner > div,
+.marketing-footer nav {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.marketing-footer-inner {
+  justify-content: space-between;
+}
+
+.marketing-footer-inner > div {
+  flex-wrap: wrap;
+}
+
+.marketing-footer-inner span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.marketing-footer a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@media (max-width: 640px) {
+  .marketing-footer-inner,
+  .marketing-footer nav {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
 .marketing-page::before,
 .marketing-page::after {
   content: "";

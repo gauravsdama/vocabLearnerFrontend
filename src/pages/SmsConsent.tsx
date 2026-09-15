@@ -192,7 +192,7 @@ export default function SmsConsent() {
                 <strong className="sms-consent-title">Twilio SMS consent</strong>
                 <p className="sms-consent-note">
                   By checking the box below, you agree to receive automated study
-                  reminder text messages from Vocabcat at the phone number above
+                  reminder text messages from VocabCat at the phone number above
                   using Twilio. Message frequency varies based on your settings.
                   Message and data rates may apply. Consent is not a condition of
                   purchase. Reply STOP to opt out and HELP for help.
@@ -207,7 +207,7 @@ export default function SmsConsent() {
                 />
                 <span>
                   I confirm that I am the subscriber for this phone number, or I
-                  have permission to receive Twilio-powered Vocabcat reminders at
+                  have permission to receive Twilio-powered VocabCat reminders at
                   this number.
                 </span>
               </label>

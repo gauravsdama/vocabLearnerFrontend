@@ -1,5 +1,5 @@
 import Card from "../Card";
-import { problemSection } from "./content";
+import { copy, problemSection } from "./content";
 import { marketingProblemCats } from "./marketingCats";
 
 export default function ProblemSection() {
@@ -21,7 +21,7 @@ export default function ProblemSection() {
               <div className="marketing-problem-figure">
                 <img
                   src={marketingProblemCats[index].src}
-                  alt={marketingProblemCats[index].alt}
+                  alt={copy(`problem.card.${index + 1}.imageAlt`)}
                   className="marketing-problem-cat"
                   loading="lazy"
                   decoding="async"

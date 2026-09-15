@@ -15,6 +15,7 @@ export default defineConfig({
       "tests/learningTargets.test.ts",
       "tests/messageUtils.test.ts",
       "tests/signing.test.ts",
+      "tests/policy.test.ts",
       "tests/playwright/**",
       ".tmp-test-dist/**",
     ],

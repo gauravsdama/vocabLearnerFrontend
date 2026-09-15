@@ -12,6 +12,8 @@ import ProblemSection from "../components/marketing/ProblemSection";
 import ReminderSummarySection from "../components/marketing/ReminderSummarySection";
 import ScrollDemoSection from "../components/marketing/ScrollDemoSection";
 import SolutionSection from "../components/marketing/SolutionSection";
+import MarketingFooter from "../components/marketing/MarketingFooter";
+import { copy } from "../components/marketing/content";
 import "../marketing.css";
 
 type AuthMode = "login" | "register";
@@ -42,11 +44,14 @@ export default function Intro() {
   return (
     <>
       <div className="marketing-page">
+        <a className="skip-link" href="#main-content">
+          {copy("nav.skipToContent")}
+        </a>
         <HeroSection
           onStartLearning={() => openAuth("register")}
           onLogin={() => openAuth("login")}
         />
-        <main>
+        <main id="main-content">
           <ScrollDemoSection />
           <ProblemSection />
           <SolutionSection />
@@ -58,11 +63,17 @@ export default function Intro() {
             onViewDemo={() => navigate("/demo")}
           />
         </main>
+        <MarketingFooter />
       </div>
 
       <Modal
         open={authOpen}
-        title={authMode === "register" ? "Start with Vocabcat" : "Log in to Vocabcat"}
+        title={
+          authMode === "register"
+            ? copy("auth.modal.registerTitle")
+            : copy("auth.modal.loginTitle")
+        }
+        closeLabel={copy("auth.modal.close")}
         onClose={() => setAuthOpen(false)}
       >
         <AuthPanel initialMode={authMode} />

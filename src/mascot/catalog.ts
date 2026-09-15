@@ -1,11 +1,11 @@
-import whiteCelebrate from "../assets/mascot/white/white_celebrate.png";
-import whiteHappyBright from "../assets/mascot/white/white_happy_bright.png";
-import whiteHappyExcited from "../assets/mascot/white/white_happy_excited.png";
-import whiteHappySit from "../assets/mascot/white/white_happy_sit.png";
-import whiteHappySoft from "../assets/mascot/white/white_happy_soft.png";
-import whiteHappyWarm from "../assets/mascot/white/white_happy_warm.png";
-import whitePeekLeft from "../assets/mascot/white/white_peek_left.png";
-import whiteSadDejected from "../assets/mascot/white/white_sad_dejected.png";
+import whiteCelebrate from "../assets/mascot/white/white_celebrate.webp";
+import whiteHappyBright from "../assets/mascot/white/white_happy_bright.webp";
+import whiteHappyExcited from "../assets/mascot/white/white_happy_excited.webp";
+import whiteHappySit from "../assets/mascot/white/white_happy_sit.webp";
+import whiteHappySoft from "../assets/mascot/white/white_happy_soft.webp";
+import whiteHappyWarm from "../assets/mascot/white/white_happy_warm.webp";
+import whitePeekLeft from "../assets/mascot/white/white_peek_left.webp";
+import whiteSadDejected from "../assets/mascot/white/white_sad_dejected.webp";
 
 export const MASCOT_VARIANTS = ["white", "calico", "ginger", "black"] as const;
 

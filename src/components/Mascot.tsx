@@ -31,7 +31,7 @@ export default function Mascot({
 }: MascotProps) {
   const requestedVariant = useMascotVariant(variant);
   const { actualVariant, src } = resolveMascotAsset(requestedVariant, pose);
-  const resolvedAlt = decorative ? "" : alt ?? "Vocabcat mascot illustration";
+  const resolvedAlt = decorative ? "" : alt ?? "VocabCat mascot illustration";
 
   return (
     <div

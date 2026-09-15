@@ -18,7 +18,7 @@ export default function Home() {
 
   return (
     <AppShell
-      eyebrow="Vocabcat"
+      eyebrow="VocabCat"
       title="Choose your next move."
       action={
         <Button variant="ghost" onClick={logout}>

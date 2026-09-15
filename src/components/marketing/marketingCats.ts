@@ -1,6 +1,6 @@
-import blackSadSoft from "../../assets/mascot/marketing/black_sad_soft.png";
-import calicoHappyBright from "../../assets/mascot/marketing/calico_happy_bright.png";
-import gingerRead from "../../assets/mascot/marketing/ginger_read.png";
+import blackSadSoft from "../../assets/mascot/marketing/black_sad_soft.webp";
+import calicoHappyBright from "../../assets/mascot/marketing/calico_happy_bright.webp";
+import gingerRead from "../../assets/mascot/marketing/ginger_read.webp";
 
 export const marketingReadCat = {
   src: gingerRead,
